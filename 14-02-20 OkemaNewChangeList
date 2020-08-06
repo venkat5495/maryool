@@ -1,0 +1,41 @@
+***************************************
+Admin notes and issue
+***************************************
+
+Done - On view new Order prdoucts the barcode display the local sku not the barcode itself (Some times the barcode is the global sku if there is no any colors or size or options) - 4 hour
+
+Done - There should be a Extra Amount added to the total invoice when the client chosse payment way (CON cash on delivery ) this amount should be edited by admin from ( invoice settings )     so that when client choose cash on delivery then the amount is added to the invoice. -4 hour
+Done - There should be a default shipping fee  edited by admin from invoice settings . this amonut is added to the total price in invoice as shipping fee . -4 hour
+Done - There should be " Min invoice price for Shipping free "  edited by admin from invoice settings so that if no shipping fee added if the total invoice equal or exceeds -4 hour
+Done - There should period of delivery by days according to the cites . so admin has to specify the days period of the delivery for group of cities . Admin can create list of periods with dperiod name and number of days then he can assign this period to multiple cities . - 6 hour
+Done - when admin print the invoice then true mark should be displayed in order to clarify that this invoice already printed and sent to the store supervisor . - 4 Hour
+Done - Insert a Discount percentage value for all products by choose Brand/ Subcategory . -2 hour
+Done -When view  Order invoice  details the columns should contain these data every product row  : product name  / quantity / barcode /  product image / price / . - 2 hour
+Done -Order Invoice is diplayed ????????  when printed  (Arabic unicode issue) - 3 hour
+Done - Add Arabic Coupon name is not working only in English name . -2 hour
+Done - How to add products to banners and some sections images in home page so that when client click on the slider or image then all products related are displayed. -2 hour
+Done - There Should functionality from which admin can add dynamic section in home page and assign products so that when client click on image then all products displayed . -3 hour
+Pending - Customer Wallet Management hidden. -4 hour
+
+***************************************
+Front End Website  Notes and Issues
+***************************************
+
+Done(already working) - products images in flash deals not diplayed
+Done - Search Products display another product not contains the same keywords
+Done - There should be a Extra Amount added to the total invoice when the client chosse payment way (CON cash on delivery ) this amount should be read from api  so that  the amount is added to the total price invoice . you should display message thats amonut will be added if you choose cash on delivery  , if the value more equal to 0 no need to display the message .
+Done - There should be a default shipping fee value read from api for all products and added to the total price in invoice . so in cart you should remove shipping fee for every single product and add this to the total price .
+Done - The shipping fee is 0 if the total price of invoice equal or exceeds default value read from api (  Min invoice price for Shipping free)
+Done(already done) - When click on any banner there is no any products listed
+Done - In shipping info this message display " Please enter valid phone " i have tried to insert "0556219146" "556219146"   .  but when i inserted  "966556219146"  then it si done . so please use the mobile nummber format sent previously to validate mobile number correctly .
+Done- Period of delivery days should be display in the invoice when th order placed . this period can be read from api according to city choosed by client . ther should be cities listed in the address so that client choose from.
+Done- When client cancel the order , he should insert the cancellation reason as comment . so it is seen for the admin .
+Done- Client can not cancel the order.
+Done - http://havanaksa.com/product/Icon-face-reflection-collection-0GKnW  (error when click on this product)
+Done - Pagination using index number page for all products should be replaced by auto load more when client scroll down ( such as mobile app)
+Done - There should scroll bar for all brands that is displayed in sidebar (there should be fixed height for sidebar brands then scrolled vertically to see all brands)
+Done - When click on any social media icon , the page should be opened in new tab .
+Done - When client click on any product , the in product details there should be sentenc for (see more of "Brand name ")  "Brand name" is a link for the name of brand this product belongs to , so if client click Example:  see more of this <a href="products.php?brand_id=product_brand_id"> Brand name </a> this can displayed under the product name
+
+
+"barryvdh/laravel-dompdf": "^0.8.2",

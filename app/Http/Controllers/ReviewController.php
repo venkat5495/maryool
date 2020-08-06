@@ -53,7 +53,7 @@ class ReviewController extends Controller
         $review = new Review;
         $review->product_id = $request->product_id;
         $review->user_id = Auth::user()->id;
-        $review->rating = isset($request->rating)?$request->rating:0;
+        $review->rating = $request->rating;
         $review->comment = $request->comment;
         if($review->save()){
             flash('Review has been submitted successfully')->success();

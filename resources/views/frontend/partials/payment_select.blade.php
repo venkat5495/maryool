@@ -49,7 +49,7 @@
                                         </div>
                                     @endif
                                     
-                                    {{--@if (\App\BusinessSetting::where('type', 'hyperpay')->first()->value == 1)
+                                    @if (\App\BusinessSetting::where('type', 'hyperpay')->first()->value == 1)
                                         <div class="payment-group">
                                             <div class="payment-radio">
                                                 <label class="payment_option">
@@ -60,7 +60,7 @@
                                                 </label>
                                             </div>
                                         </div>
-                                    @endif--}}
+                                    @endif
                                     
                                     @if(\App\BusinessSetting::where('type', 'cash_payment')->first()->value == 1)
                                         <div class="payment-group">

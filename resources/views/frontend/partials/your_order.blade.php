@@ -108,8 +108,7 @@
                         </td>
                     </tr>
                 @endif
-                {{--@if($total_invoice < $minimum_invoice_price && isset($cod_charge) && !empty($cod_charge))--}}
-                @if(isset($cod_charge) && !empty($cod_charge))
+                @if($total_invoice < $minimum_invoice_price && isset($cod_charge) && !empty($cod_charge))
                     @php
                         $cod = $cod_charge;
                     @endphp

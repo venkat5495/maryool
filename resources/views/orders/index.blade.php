@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 @section('content')
 <form method="post" action="{{ route('customer.multipleinvoice.download') }}" target="_blank" id="downloadForm">
     @csrf
@@ -220,34 +219,16 @@
         "status_value":status_value
         },
         success:function(html){
-            
-             if(!(html=="")){
-         var aramex_error=JSON.parse(html);
-        $("#exampleModal"+id).modal("hide");
-       showAlert('warning', aramex_error.message);
-        $("#loader").css('display','none','important');
-         $('#btnupdate').prop('disabled', false);
-          window.location.reload();
-         }
-         else{
-            
-        $("#exampleModal"+id).modal("hide");
-        showAlert('success', 'Forward to successfully saved.');
-        $("#loader").css('display','none','important');
-         $('#btnupdate').prop('disabled', false);
-         window.location.reload();
-             
-         }
           //console.log(html);
           
           //alert(html);
           
          // $('.demo-dt-basic').DataTable().ajax.reload();
-        // $("#exampleModal"+id).modal("hide");
-      //  showAlert('success', 'Forward to successfully saved.');
-        // $("#loader").css('display','none','important');
-        //  $('#btnupdate').prop('disabled', false);
-       // window.location.reload();
+         $("#exampleModal"+id).modal("hide");
+        showAlert('success', 'Forward to successfully saved.');
+         $("#loader").css('display','none','important');
+          $('#btnupdate').prop('disabled', false);
+        window.location.reload();
         },
          beforeSend:function(){
              $("#loader").css('display','block','important');

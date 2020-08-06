@@ -1,4 +1,4 @@
-@extends('frontend.layouts.app')
+@extends('frontend.layouts.blank')
 @section('content')
     <style>
         #scrollUp{
@@ -41,7 +41,6 @@
 }
 
 .small-box h3 {
-    font-size: 3.2rem;
     font-weight: 700;
     margin: 0 0 10px 0;
     padding: 0;
@@ -50,103 +49,128 @@
 }
 </style>
     <!--breadcrumbs area start-->
-    <div class="breadcrumb-area">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 text-center">
-                    <h1 class="page-title">My Account</h1>
-                    <ul class="breadcrumb justify-content-center">
-                        <li><a href="{!! route('home') !!}">{!! __('Home') !!}</a></li>
-                        <li class="current">{!! __('My Account') !!}</li>
-                    </ul>
+<div class="breadcrumb_section bg_gray page-title-mini">
+    <div class="container"><!-- STRART CONTAINER -->
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <div class="page-title">
+                    <h1>My Account</h1>
                 </div>
             </div>
+            <div class="col-md-6">
+                <ol class="breadcrumb justify-content-md-end">
+                    <li class="breadcrumb-item"><a href="{!! route('home') !!}">{!! __('Home') !!}</a></li>
+                    <li class="breadcrumb-item active">{!! __('My Account') !!}</li>
+                </ol>
+            </div>
         </div>
-    </div>
+    </div><!-- END CONTAINER-->
+</div>
 
-    <!--breadcrumbs area end-->
-
-    <!-- my account start  -->
-    <section class="main_content_area" style="font-size: 14px;">
-        <div class="container">
-            
-            @if ($errors->has('phone'))
+<div class="section">
+    <div class="container">
+         @if ($errors->has('phone'))
                 <div class="alert alert-danger alert-block">
-            	    <button type="button" class="close" data-dismiss="alert">×</button>	
+                    <button type="button" class="close" data-dismiss="alert">×</button> 
                     <strong>{{ $errors->first('phone') }}</strong>
                 </div>
             @endif
 
             @if ($errors->has('city'))
                 <div class="alert alert-danger alert-block">
-            	    <button type="button" class="close" data-dismiss="alert">×</button>	
+                    <button type="button" class="close" data-dismiss="alert">×</button> 
                     <strong>{{ $errors->first('city') }}</strong>
                 </div>
             @endif
 
             @if ($errors->has('state'))
                 <div class="alert alert-danger alert-block">
-            	    <button type="button" class="close" data-dismiss="alert">×</button>	
+                    <button type="button" class="close" data-dismiss="alert">×</button> 
                     <strong>{{ $errors->first('state') }}</strong>
                 </div>
             @endif
 
             @if ($errors->has('address'))
                 <div class="alert alert-danger alert-block">
-            	    <button type="button" class="close" data-dismiss="alert">×</button>	
+                    <button type="button" class="close" data-dismiss="alert">×</button> 
                     <strong>{{ $errors->first('address') }}</strong>
                 </div>
             @endif
 
             @if ($errors->has('email'))
                 <div class="alert alert-danger alert-block">
-            	    <button type="button" class="close" data-dismiss="alert">×</button>	
+                    <button type="button" class="close" data-dismiss="alert">×</button> 
                     <strong>{{ $errors->first('email') }}</strong>
                 </div>
             @endif
 
             @if ($errors->has('name'))
                 <div class="alert alert-danger alert-block">
-            	    <button type="button" class="close" data-dismiss="alert">×</button>	
+                    <button type="button" class="close" data-dismiss="alert">×</button> 
                     <strong>{{ $errors->first('name') }}</strong>
                 </div>
             @endif
 
             @if ($message = Session::get('success'))
             <div class="alert alert-success alert-block">
-            	<button type="button" class="close" data-dismiss="alert">×</button>	
+                <button type="button" class="close" data-dismiss="alert">×</button> 
                 <strong>{{ $message }}</strong>
             </div>
             @endif
             
             @if ($message = Session::get('error'))
             <div class="alert alert-danger alert-block">
-            	<button type="button" class="close" data-dismiss="alert">×</button>	
+                <button type="button" class="close" data-dismiss="alert">×</button> 
                 <strong>{{ $message }}</strong>
             </div>
             @endif
-
-
-            <div class="account_dashboard">
-                <div class="row">
-                    <div class="col-sm-12 col-md-3 col-lg-3">
-                        <div class="user-dashboard-tab__head nav flex-column" role="tablist" aria-orientation="vertical">
-                            <a class="nav-link active" href="#dashboard" data-toggle="pill">{{__('Dashboard')}}</a>
-                            <a class="nav-link" href="#orders" data-toggle="pill">{{__('Orders')}}</a>
-                            <a class="nav-link" href="#review" data-toggle="pill">{{__('My Product Review')}}</a>
-                            <a class="nav-link" href="#notification" data-toggle="pill">{{__('Notification')}}</a>
-                            <a class="nav-link" href="#account-details"  onclick="edit_address(0)" data-toggle="pill">{{__('Account details')}}</a>
-                            <a class="nav-link" href="#view_wishlist" data-toggle="pill">{{__('My Wishlist')}}</a>
-                            <a class="nav-link" href="#chnage-password" data-toggle="pill">{{__('Change Password')}}</a>
-                            <a class="nav-link" href="#my-wallet" data-toggle="pill">{{__('My Wallet')}}</a>
-                            <a class="nav-link" href="#addresses" data-toggle="pill">{{__('Addresses')}}</a>
-                            <a class="nav-link" href="{!! route('logout') !!}">{{__('Logout')}}</a>
-                        </div>
-                    </div>
-                    
-                    <div class="col-sm-12 col-md-9 col-lg-9">
-                        <div class="tab-content dashboard_content">
-                            <div class="tab-pane fade show active" id="dashboard">
+        <div class="row">
+            <div class="col-lg-3 col-md-4">
+                <div class="dashboard_menu">
+                    <ul class="nav nav-tabs flex-column" role="tablist">
+                      <li class="nav-item">
+                        <a class="nav-link active" id="dashboard-tab" data-toggle="tab" href="#dashboard" role="tab" aria-controls="dashboard" aria-selected="false"><i class="ti-layout-grid2"></i>Dashboard</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="ti-shopping-cart-full"></i>Orders</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="productreview-tab" data-toggle="tab" href="#productreview" role="tab" aria-controls="productreview" aria-selected="false"><i class="ti-shopping-cart-full"></i>My Product Review</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="notification-tab" data-toggle="tab" href="#notification" role="tab" aria-controls="notification" aria-selected="false"><i class="ti-shopping-cart-full"></i>Notification</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="address-tab" data-toggle="tab" href="#address" role="tab" aria-controls="address" aria-selected="true"><i class="ti-location-pin"></i>My Address</a>
+                      </li>
+                       <li class="nav-item">
+                        <a class="nav-link" id="wishlist-tab" data-toggle="tab" href="#wishlist" role="tab" aria-controls="wishlist" aria-selected="true"><i class="ti-location-pin"></i>My Wishlist</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="changepassword-tab" data-toggle="tab" href="#changepassword" role="tab" aria-controls="changepassword" aria-selected="true"><i class="ti-location-pin"></i>Change Password</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="wallet-tab" data-toggle="tab" href="#wallet" role="tab" aria-controls="wallet" aria-selected="true"><i class="ti-location-pin"></i>My Wallet</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="account-detail-tab" data-toggle="tab" href="#account-detail" role="tab" aria-controls="account-detail" aria-selected="true"><i class="ti-id-badge"></i>Account details</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="{!! route('logout') !!}"><i class="ti-lock"></i>Logout</a>
+                      </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-9 col-md-8">
+                <div class="tab-content dashboard_content">
+                    <div class="tab-pane fade active show" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Dashboard</h3>
+                            </div>
+                            <div class="card-body">
+                                <p>From your account dashboard. you can easily check &amp; view your <a href="javascript:void(0);" onclick="$('#orders-tab').trigger('click')">recent orders</a>, manage your <a href="javascript:void(0);" onclick="$('#address-tab').trigger('click')">shipping and billing addresses</a> and <a href="javascript:void(0);" onclick="$('#account-detail-tab').trigger('click')">edit your password and account details.</a></p>
+                                <div class="tab-pane fade show active" id="dashboard">
                                 
                                 <div class="row nav">
                                     <div class="col-lg-4 col-sm-6">
@@ -201,120 +225,117 @@
                                         </div>
                                     </div>
 
-                                </div>
+                                </div>                               
                                 
                                 
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-box bg-white mt-4">
-                                            <div class="form-box-title px-3 py-2 clearfix ">
-                                                <div class="float-right">
-                                                   {{--  <a href="{{ route('profile') }}" class="btn btn-link btn-sm">{{__('Edit')}}</a> --}}
-                                                   <div class="dashboard_tab_button">
-                                                    <ul  class="nav flex-column dashboard-list">
-                                                        <li>
-                                                            <a href="#account-details" data-toggle="tab" onclick="edit_address(0)" class="nav-link btn btn-5 btn-style-1 color-1">{{__('Edit')}}</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-box-content p-3">
-                                                <table class="table table-bordered">
-                                                    <tr>
-                                                        <td>{{__('Address')}}:</td>
-                                                        <td class="p-2">{{ Auth::user()->address }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>{{__('Country')}}:</td>
-                                                        <td class="p-2">
-                                                            @if (Auth::user()->country != null)
-                                                                {{ \App\Country::where('code', Auth::user()->country)->first()->name }}
-                                                            @endif
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>{{__('State')}}:</td>
-                                                        <td class="p-2">
-                                                        @php
-                                                            if (Auth::user()->state != null) 
-                                                            {
-                                                                if (session('locale') == "en") {
-                                                                    echo $state = \App\State::where('id', Auth::user()->state)->first()->state_en_name;
-                                                                } else {
-                                                                    echo $state = \App\State::where('id', Auth::user()->state)->first()->state_ar_name;                                                                    
-                                                                }
-                                                            }
-                                                            
-                                                        @endphp
-                                                        </td>
-                                                    </tr>
-                                                    
-                                                    <tr>
-                                                        <td>{{__('City')}}:</td>
-                                                        <td class="p-2">
-                                                        @php
-                                                            if (Auth::user()->city != null)
-                                                            {
-                                                                echo $city = Auth::user()->city;
-                                                            }
-                                                        @endphp
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>{{__('Phone')}}:</td>
-                                                        <td class="p-2">{{ Auth::user()->phone }}</td>
-                                                    </tr>
-                                                </table>
-                                            </div>
-                                        </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+                        <div class="card">
+                            <div class="card-header">
+                                 <h3>Orders</h3>
+                                
+                            </div>
+                            <div class="card-body">
+                                @include('frontend.purchase_history')
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="productreview" role="tabpanel" aria-labelledby="productreview-tab">
+                        <div class="card">
+                            <div class="card-header">
+                                 <h3>Product Review</h3>
+                                
+                            </div>
+                            <div class="card-body">
+                                @include('frontend.customer.reviews')
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="notification" role="tabpanel" aria-labelledby="notification-tab">
+                        <div class="card">
+                            <div class="card-header">
+                                 <h3>Notification</h3>
+                                
+                            </div>
+                            <div class="card-body">
+                                @include('frontend.customer.notifications')
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="wishlist" role="tabpanel" aria-labelledby="wishlist-tab">
+                        <div class="card">
+                            <div class="card-header">
+                                 <h3>Wishlist</h3>
+                                
+                            </div>
+                            <div class="card-body">
+                                @include('frontend.partials.wishlist')
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="changepassword" role="tabpanel" aria-labelledby="changepassword-tab">
+                        <div class="card">
+                            <div class="card-header">
+                                 <h3>Change Password</h3>
+                                
+                            </div>
+                            <div class="card-body">
+                                @include('frontend.customer.password')
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="wallet" role="tabpanel" aria-labelledby="wallet-tab">
+                        <div class="card">
+                            <div class="card-header">
+                                 <h3>Wallet</h3>
+                                
+                            </div>
+                            <div class="card-body">
+                                @include('frontend.customer.wallet')
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card mb-3 mb-lg-0">
+                                    <div class="card-header">
+                                        <h3>Billing Address</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- <address>House #15<br>Road #1<br>Block #C <br>Angali <br> Vedora <br>1212</address>
+                                        <p>New York</p>
+                                        <a href="#" class="btn btn-fill-out">Edit</a> -->
+                                        @include('frontend.customer.addresses')
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="orders">
-                                <h3>Orders</h3>
-                                @include('frontend.purchase_history')
-                            </div>
-                            <div class="tab-pane fade" id="review">
-                                <h3>My Product Review</h3>
-                                @include('frontend.customer.reviews')
-                            </div>
-                            <div class="tab-pane" id="notification">
-                                <h3>Notification</h3>
-                                @include('frontend.customer.notifications')
-                            </div>
-                            <div class="tab-pane fade" id="account-details">
-                                <h3>Account Details</h3>
-                                @include('frontend.customer.profile')
-                            </div>
-                            <div class="tab-pane fade" id="view_wishlist">
-                                <h3>Wishlist</h3>
-                                <table class="table table-bordered">
-                                <tr>
-                                    <th>Delete</th>	<th>Image</th><th>Product Name</th>	<th>ProductPrice</th><th>Add to cart</th>
-                                </tr>
-                                @include('frontend.partials.wishlist')
-                                </table>
-                            </div>
-                            <div class="tab-pane fade" id="chnage-password">
-                                <h3>Change Password</h3>
-                                @include('frontend.customer.password')
-                            </div>
-                            <div class="tab-pane fade" id="my-wallet">
-                                @include('frontend.customer.wallet')
-                            </div>
-                            <div class="tab-pane fade" id="addresses">
-                                <h3>Address</h3>
-                                @include('frontend.customer.addresses')
-                            </div>
+                            <!-- <div class="col-lg-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3>Shipping Address</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <address>House #15<br>Road #1<br>Block #C <br>Angali <br> Vedora <br>1212</address>
+                                        <p>New York</p>
+                                        <a href="#" class="btn btn-fill-out">Edit</a>
+                                    </div>
+                                </div>
+                            </div> -->
                         </div>
+                    </div>
+                    <div class="tab-pane fade" id="account-detail" role="tabpanel" aria-labelledby="account-detail-tab">
+                        @include('frontend.customer.profile')
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-    <!-- my account end   -->
-
+    </div>
+</div>
+    <!--breadcrumbs area end-->
 @endsection
 <script>
     //for wallet

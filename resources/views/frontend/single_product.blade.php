@@ -12,45 +12,58 @@ if ($product->todays_deal == 1) {
     $new = "New";
 }
 ?>
-<div class="mirora-product">
-    <div class="product-img"> 
-        <a href="{!! route('product',$product->slug) !!}">
-        <img src="{{ asset($product->thumbnail_img) }}" alt="Product" class="primary-image" /> 
-        <img src="{{ asset($product->featured_img) }}" alt="Product" class="secondary-image" />
-        <div class="product-img-overlay"> <span class='product-label discount'> {{ __($new) }}</span> <span class="btn btn-transparent btn-fullwidth btn-medium btn-style-1">{!! __('Quick View') !!}</span></div>
-        </a>
-    </div>
-    
-    <div class="product-content text-center"> <span><?= $brand->name ?></span><br>
-     
-        <h4><a  href="{!! route('product',$product->slug) !!}">{{ $product->name }}</a></h4>
-        <div class="product-price-wrapper">
-            @if (home_price($product) != home_discounted_price($product))
-                <span style="color: #332f2f;">-{!! floor($product->discount) !!}% |</span>
-            @endif
-            <span class="money">{!! home_discounted_price($product)  !!}</span>
-            @if (home_price($product) != home_discounted_price($product))
-                | <span class="product-price-old"> <span class="money">{!! home_price($product) !!}</span> </span>
-            @endif
-        </div>
-    </div>
-    <div class="mirora_product_action text-center position-absolute">
-        <div class="product-rating"> <span> <i class="fa fa-star theme-star"></i> <i class="fa fa-star theme-star"></i> <i class="fa fa-star theme-star"></i> <i class="fa fa-star theme-star"></i> <i class="fa fa-star"></i> </span> </div>
-            <p> 
-            <?php
-                $p = strip_tags($product->description);
-                $p = explode(' ', $p);
-                $dots = "";
-                if(count($p) > 15) { 
-                    $dots = "...";
-                }
-                echo implode(' ', array_slice($p, 0, 15)).$dots; 
-            ?>
-            </p>
-            <div class="product-action"> 
-                <a class="same-action" onclick="addToWishList({{ $product->id }})" href="javascript:;" title="{!! __('Add to wishlist') !!}"> <i class="@if(isset($product->follow) && $product->follow == 1) fa fa-heart @else fa fa-heart-o @endif" aria-hidden="true"></i></i> </a> 
-                <a class="add_cart cart-item action-cart" href="{!! route('product',$product->slug) !!}"><span>{!! __('Add to cart') !!}</span></a>
-                <a class="same-action compare-mrg" onclick="addToCompare({{ $product->id }})" href="javascript:;" title="{!! __('Add to compare') !!}"> <i class="fa fa-sliders fa-rotate-90"></i> </a> 
-            </div>
-    </div>
+
+<div class="item">
+<div class="product">
+<div class="product_img">
+	<a href="{!! route('product',$product->slug) !!}">
+		<img src="{{ asset($product->thumbnail_img) }}" alt="{{ $product->name }}">
+	</a>
+	<div class="product_action_box">
+		<ul class="list_none pr_action_btn">
+			<li class="add-to-cart"><a href="{!! route('product',$product->slug) !!}"><i class="icon-basket-loaded"></i> Add To Cart</a></li>
+			<li><a href="javascript:void(0)" onclick="addToCompare({{ $product->id }})"><i class="icon-shuffle"></i></a></li>                                        
+			<li><a href="javascript:void(0)" onclick="addToWishList({{ $product->id }})"><i class="icon-heart"></i></a></li>
+		</ul>
+	</div>
+</div>
+<div class="product_info">
+	<h6 class="product_title"><a href="shop-product-detail.html">Blue Dress For Woman</a></h6>
+	<div class="product_price">
+		 @if (home_price($product) != home_discounted_price($product))
+			<span style="color: #332f2f;">-{!! floor($product->discount) !!}% |</span>
+		@endif
+		<span class="money">{!! home_discounted_price($product)  !!}</span>
+		@if (home_price($product) != home_discounted_price($product))
+			| <span class="product-price-old"> <span class="money">{!! home_price($product) !!}</span> </span>
+		@endif
+	</div>
+	<div class="rating_wrap">
+		<div class="rating">
+			<div class="product_rate" style="width:80%"></div>
+		</div>
+		<span class="rating_num">(21)</span>
+	</div>
+	<div class="pr_desc">
+		<p> 
+		<?php
+			$p = strip_tags($product->description);
+			$p = explode(' ', $p);
+			$dots = "";
+			if(count($p) > 15) { 
+				$dots = "...";
+			}
+			echo implode(' ', array_slice($p, 0, 15)).$dots; 
+		?>
+		</p>
+	</div>
+	<div class="pr_switch_wrap">
+		<div class="product_color_switch">
+			<span class="active" data-color="#87554B"></span>
+			<span data-color="#333333"></span>
+			<span data-color="#DA323F"></span>
+		</div>
+	</div>
+</div>
+</div>
 </div>

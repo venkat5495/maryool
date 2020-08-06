@@ -74,22 +74,18 @@ class HomeController extends Controller
     }
     public function login()
     {
-        if(Auth::check() && Auth::user()->user_type != 'admin' && Auth::user()->user_type != 'staff') {
+        if(Auth::check()) {
             return redirect()->route('home');
-        }elseif(Auth::check() && (Auth::user()->user_type == 'admin'|| Auth::user()->user_type == 'staff')){
-            Auth::logout();
         }
         return view('frontend.login-register');
     }
 
     public function registration()
     {
-        if(Auth::check() && Auth::user()->user_type != 'admin' && Auth::user()->user_type != 'staff') {
+        if(Auth::check()) {
             return redirect()->route('home');
-        }elseif(Auth::check() && (Auth::user()->user_type == 'admin'|| Auth::user()->user_type == 'staff')){
-            Auth::logout();
         }
-        return view('frontend.login-register');
+        return view('frontend.register');
     }
 
     public function user_login(Request $request)
@@ -433,23 +429,13 @@ class HomeController extends Controller
         } else {
             $user = new UserAddress;    
         }
-        
-        if (session('locale') == "en"){
-            $cities = City::select('city_name_en')->where('id', $request->city)->first();
-            $cities = isset($cities->city_name_en)?$cities->city_name_en:'-';
-        }else{
-            $cities = City::select('city_name_ar')->where('id', $request->city)->first();
-            $cities = isset($cities->city_name_ar)?$cities->city_name_ar:'-';
-        }
-        
         $user->user_id      = Auth::user()->id;
         $user->title        = $request->title;
         $user->full_name    = $request->name;
         $user->email        = $request->email;
         $user->address      = $request->address;
         $user->state_id     = $request->state;
-        $user->city         = $cities;
-        $user->city_id      = $request->city;
+        $user->city         = $request->city;
         $user->phone        = ltrim($request->phone, '0');
 
         if($user->save()){
@@ -1344,9 +1330,9 @@ class HomeController extends Controller
                 }
 
                 if (session('locale') == "en"){
-                    $html .="<option value='".$value->id."'  ".$selected.">".$value->city_name_en."</option>";
+                    $html .="<option value='".$value->city_name_en."'  ".$selected.">".$value->city_name_en."</option>";
                 }else{
-                    $html .="<option value='".$value->id."' ".$selected.">".$value->city_name_ar."</option>";
+                    $html .="<option value='".$value->city_name_ar."' ".$selected.">".$value->city_name_ar."</option>";
                 }
             }
         }

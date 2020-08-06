@@ -1,6 +1,5 @@
 @php
     $i = ($orders->currentpage()-1)* $orders->perpage() + 1;
-    $deliveryboys=\App\DeliveryBoyDetail::orderBy('id', 'desc')->get();
 @endphp
 @if($orders->isNotEmpty())
     @foreach ($orders as $key => $order_id)
@@ -19,8 +18,7 @@
                     {{ $order->code }} @if($order->viewed == 0) <span class="pull-right badge badge-info">{{ __('New') }}</span> @endif
                 </td>
                 <td>
-                    {{-- count($order->orderDetails->where('seller_id', Auth::user()->id)) --}}
-                     {{ count($order->orderDetails) }}
+                    {{ count($order->orderDetails->where('seller_id', Auth::user()->id)) }}
                 </td>
                 <td>
                     @if ($order->user_id != null)
@@ -38,11 +36,8 @@
                             $voucher_amount = $order->discount_amount;
                         @endphp
                     @endif
-                    @php 
-                        $orderTotalPrice = ($order->orderDetails->sum('price')+ $order->orderDetails->sum('shipping_cost') + ($order->shipping_charge ?? 00)+($order->cod_charge ?? 00))- $voucher_amount ;
-                    @endphp
-                    {{single_price($orderTotalPrice)}}
-                    {{-- single_price($order->orderDetails->where('seller_id', Auth::user()->id)->sum('price') + $order->orderDetails->where('seller_id', Auth::user()->id)->sum('tax') - $voucher_amount) --}}
+
+                    {{ single_price($order->orderDetails->where('seller_id', Auth::user()->id)->sum('price') + $order->orderDetails->where('seller_id', Auth::user()->id)->sum('tax') - $voucher_amount)}}
                 </td>
                 <?php /*
            <td>{{$voucher_amount}}</td>  */ ?>

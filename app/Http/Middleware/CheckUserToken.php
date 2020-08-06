@@ -16,11 +16,9 @@ class CheckUserToken
      */
     public function handle($request, Closure $next)
     {
-      
-      
         if(($user = Auth::user()) && $request->hasHeader("authorization") && $request->header("authorization") == "Bearer {$user->api_token}")
         {
-             return $next($request);
+            return $next($request);
         }
         return response()->json(['success'=>false, 'data'=>(object)[],'message'=>__('Unauthorize authorization token.')], 401);
     }

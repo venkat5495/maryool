@@ -183,17 +183,12 @@
 
 		    <li class="menuhide" aria-haspopup="true"><a href="#">My Account</a>
                 <ul class="sub-menu">
-                     @auth
-                        @if(Auth::user()->user_type != 'admin' && Auth::user()->user_type != 'staff')
-                            <li><a href="{!! route('dashboard') !!}"><i class="fas fa-user"></i> {!! __('View Profile') !!}</a></li>
-                            <li><a href="{!! route('logout') !!}"><i class="fas fa-sign-out-alt"></i> {!! __('Logout') !!}</a></li>    
-                        @else
-                           <li><a href="{!! route('user.login') !!}"><i class="fas fa-heart"></i>{!! __('Register Now') !!}</a></li>
-                            <li><a href="{!! route('user.login') !!}"><i class="fas fa-user-tie"></i>{!! __('Login') !!}</a></li>
-                        @endif
+                    @auth
+                    <li><a href="{!! route('dashboard') !!}"><i class="fas fa-user"></i> {!! __('View Profile') !!}</a></li>
+                    <li><a href="{!! route('logout') !!}"><i class="fas fa-sign-out-alt"></i> {!! __('Logout') !!}</a></li>
                     @else
-                        <li><a href="{!! route('user.login') !!}"><i class="fas fa-heart"></i>{!! __('Register Now') !!}</a></li>
-                        <li><a href="{!! route('user.login') !!}"><i class="fas fa-user-tie"></i>{!! __('Login') !!}</a></li>
+                    <li><a href="{!! route('user.login') !!}"><i class="fas fa-heart"></i>{!! __('Register Now') !!}</a></li>
+                    <li><a href="{!! route('user.login') !!}"><i class="fas fa-user-tie"></i>{!! __('Login') !!}</a></li>
                     @endauth
                 </ul>
             </li>

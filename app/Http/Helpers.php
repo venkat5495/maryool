@@ -471,11 +471,12 @@ if (! function_exists('send_sms')) {
             $message = "%5B%23%5DYour%20verification%20code%20for%20".trim(config('app.name'))."%20is%20%3A%20" . $otp . "%0AuLpSUIV%2F7p%2F";
             $sms = $sms_url . "&mobile=" . $phone . "&message=" . $message;
             
+          
+
             $ch = curl_init ();
-            //$final_url=curl_escape($ch, $sms);
+            $final_url=curl_escape($ch, $sms);
             
-            //curl_setopt ( $ch, CURLOPT_URL, $final_url );
-            curl_setopt ( $ch, CURLOPT_URL, $sms );
+            curl_setopt ( $ch, CURLOPT_URL, $final_url );
             curl_setopt ( $ch, CURLOPT_CUSTOMREQUEST, "GET" );
             curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
 

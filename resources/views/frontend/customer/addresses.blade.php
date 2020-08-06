@@ -1,12 +1,7 @@
-<style>
-    .form-control {
-        font-size: inherit;
-        height: 35px;
-    }
-</style>
-<button class="btn btn-5 btn-style-1 color-1" type="button" onclick="add_address_billing()">{{__('Add New')}}</button>
+<button class="btn btn-fill-out" type="button" onclick="add_address_billing()">{{__('Add New')}}</button>
+<div class="row"></div>
 <div id="js_address_div" style="display:none">
-    <form action="{{ route('customer.address.add') }}" method="POST" enctype="multipart/form-data" style="height: auto;">
+    <form action="{{ route('customer.address.add') }}" method="POST">
         @csrf
         <div id="billing_details_field">
             @include('frontend.partials.billing_details')
@@ -42,7 +37,7 @@
                 @php $n = $n+1; @endphp
             @endforeach
         @else
-            <tr><td colspan="6">{{__('No items found.')}}</td></tr>
+            <tr><td colspan="5">{{__('No items found.')}}</td></tr>
         @endif
     </tbody>
 </table> 
@@ -156,9 +151,6 @@
         </div>
     </div>
 </div>
-
-
-
 @if($notifications->isNotEmpty())
 {{ $notifications->links() }}
 @endif

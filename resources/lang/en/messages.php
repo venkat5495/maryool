@@ -13,7 +13,7 @@
         "phone_min" => "The phone number field is invalid.",
         "phone_number_required" => "The phone number field is required.",
         "email_address_unique" => "The email address has already been taken.",
-        "registration_completed" => "Registration successfull. Please verify your mobile.",
+        "registration_completed" => "Registration successfull. Please verify your email.",
         "something_wrong" => "something went wrong. please contact administrator.",
         "code_required" => "The code field is required.",
         "user_varification_completed" => "Your verification completed.",

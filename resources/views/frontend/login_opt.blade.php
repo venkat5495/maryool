@@ -1,4 +1,4 @@
-@extends('frontend.layouts.app')
+@extends('frontend.layouts.blank')
 
 @section('content')
 <!-- Main Wrapper Start -->
@@ -20,7 +20,7 @@
                                 <strong>Error!</strong> {!! session('error') !!}
                             </div>
                         @endif
-                        
+                        Your OTP: <?= $code ?>
                         <form class="form" method="post" action="{!! route('user.opt.verify') !!}">
                             @csrf
                             <div class="form__group mb--20">

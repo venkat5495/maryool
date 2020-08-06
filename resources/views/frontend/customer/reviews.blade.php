@@ -6,8 +6,8 @@
                 <th>{{__('Product Image')}}</th>
                 <th>{{__('Product Name')}}</th>                                                
                 <th>{{__('Comment')}}</th>
-                <th width="15%">{{__('Rating')}}</th>
-                <th width="13%">{{__('Order Date')}}</th>
+                <th>{{__('Rating')}}</th>
+                <th>{{__('Order Date')}}</th>
             </tr>
         </thead>
         <tbody>
@@ -81,7 +81,7 @@
                 </div>
             @else
                 <tr>
-                    <td colspan="7">{{__('No items found.')}}</td>
+                    <td colspan="5">{{__('No items found.')}}</td>
                 </tr>
             @endif
         </tbody>

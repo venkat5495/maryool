@@ -83,10 +83,9 @@ class OrderController extends Controller
         }
 
            // new line for delivery boys
-        //$deliveryboys=DeliveryBoyDetail::orderBy('id', 'desc')->get();
+        $deliveryboys=DeliveryBoyDetail::orderBy('id', 'desc')->get();
 
-        //return view('orders.index', compact('orders','deliveryboys'));
-        return view('orders.index', compact('orders'));
+        return view('orders.index', compact('orders','deliveryboys'));
     }
 
     /**
@@ -204,9 +203,9 @@ class OrderController extends Controller
             $coupon_discount    = session()->get('coupon_discount');
             $coupon_code        = session()->get('coupon_code');
         }
-
-        $last_id                = Order::latest('id')->first()->id;
-        $last_id                = 1000 + $last_id;
+		//dd(Order::latest('id'));
+        //$last_id                = Order::latest('id')->first();
+        $last_id                = 1000;
         $order                  = new Order;
         if(Auth::check()){
             $order->user_id     = Auth::user()->id;

@@ -24,7 +24,7 @@ body{
     font-size: 14px;
 }
 p:not(.lead) {
-    font-size: .8125rem;
+    font-size: .8125em;
 }
 .body-wrap{
     overflow-x: unset;
@@ -1434,7 +1434,7 @@ label.payment_option input:checked + span:after{
     margin: 25px 0;
 }
 
-.added-to-cart .product-box .block-image {
+/* .added-to-cart .product-box .block-image {
     display: table-cell;
     width: 100px;
     height: 100px;
@@ -1443,14 +1443,14 @@ label.payment_option input:checked + span:after{
 .added-to-cart .product-box .block {
     display: table;
     width: 100%;
-}
+} */
 
-.added-to-cart .product-box .block-body {
+/* .added-to-cart .product-box .block-body {
     display: table-cell;
     vertical-align: middle;
     position: relative;
     padding: 0 0 0 2rem;
-}
+} */
 
 .added-to-cart .product-box .block-body h6 {
     font-size: 14px;

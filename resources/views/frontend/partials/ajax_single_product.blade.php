@@ -72,4 +72,3 @@
             </td>
         </tr>
     </table>
-    <input type="hidden" name="product_qty" id="product_qty" value="{{$product->quantity}}" />

@@ -171,6 +171,7 @@ a:hover {
     border-bottom-right-radius: 0%;
     border-right-color: #FFF;
     border-left-color: #e6e6e6;
+	font-size:22px;
 }
 .input-group--style-2 .input-group-btn:not(:last-child) > .btn {
     border-top-left-radius: 0%;

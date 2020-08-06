@@ -15,207 +15,270 @@
         $catname        = "name";
     }
 ?>
-<body>
-<div class="wrapper bg--white"> 
-<header class="header headery-style-1">
-<div class="header-top header-top-1 mobile-hide">
-  <div class="container">
-    <div class="row no-gutters align-items-center">
-      <div class="col-lg-4 d-flex align-items-center flex-column flex-lg-row">
-         <ul class="header-toolbar-icons">           
-            <li class="wishlist-icon"> <a href="{!! route('dashboard') !!}" class="bordered-icon"><i class="fa fa-heart"></i></a> </li>
-            <li class="mini-cart-icon">
-              <div class="mini-cart mini-cart--1" id="cart_items"> 
-                <a class="mini-cart__dropdown-toggle bordered-icon" id="cartDropdown"> <span class="mini-cart__count">{{Session::has('cart') ? count(Session::get('cart')) : 0}}</span> <i class="icon_cart_alt mini-cart__icon"></i> <span class="mini-cart__ammount">{!! __('item(s)') !!}<i class="fa fa-angle-down"></i></span></a> 
-
-                <div class="mini-cart__dropdown-menu">
-                  <div class="mini-cart__content" id="miniCart">
-
-
-
-
-                            @if(Session::has('cart'))
-                                @if(count($cart = Session::get('cart')) > 0)
-                                    <div class="mini-cart__item">
-                                        @php
-                                            $total = 0;
-                                        @endphp
-                                        @foreach($cart as $key => $cartItem)
-                                            @php
-                                                $product = \App\Product::find($cartItem['id']);
-                                                $total = $total + $cartItem['price']*$cartItem['quantity'];
-                                                if (!empty($cartItem['color'])){
-                                                    $colorname = \App\Color::where('code',$cartItem['color'])->pluck('name')->first();
-                                                }
-                                            @endphp
-                                            <div class="mini-cart__item--single">
-                                                <div class="mini-cart__item--image"> <img src="{{ asset($product->thumbnail_img) }}" alt="product"> </div>
-                                                <div class="mini-cart__item--content">
-                                                    <h4 class="mini-cart__item--name"><a href="{{ route('product', $product->slug) }}">{{ __($product->$catname) }}</a> </h4>
-                                                    <p class="mini-cart__item--quantity">{{ $cartItem['quantity'] }}x {{ single_price($cartItem['price']) }}</p>
-                                                    @if (!empty($colorname))
-                                                        <span>{{$colorname}}</span>
-                                                    @endif
-                                                </div>
-                                                <a class="mini-cart__item--remove" href="javascript:void(0)" onclick="removeFromCart({{ $key }})"><i class="icon_close"></i></a>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                    <div class="mini-cart__calculation">
-                                        <p> <span class="mini-cart__calculation--item">Sub Total :</span> <span class="mini-cart__calculation--ammount">SAR{{ single_price($total) }}</span> </p>
-                                    </div>
-                                    <div class="mini-cart__btn"> <a href="{{ route('cart') }}" class="btn btn-fullwidth btn-style-1">{!! __('View Cart') !!}</a> <a href="{{ route('checkout.shipping_info') }}" class="btn btn-fullwidth btn-style-1">{!! __('Checkout') !!}</a> </div>
-                            @else
-                                {{__('Your Cart is empty')}}
-                            @endif
-                        @else
-                        {{__('Your Cart is empty')}}
-                    @endif
-
-
-
-
-
-                  </div>
-                </div>
-              </div>
-            </li>
-          </ul>
-      </div>
-      <div class="col-lg-4">
-      <div class="header-toolbar">
-          <div class="search-form-wrapper">
-            <form action="{!! route('search') !!}" method="get" class="search-form">
-                <input type="text" name="q" id="search" class="search-form__input" placeholder="{!! __('Search..') !!}">
-                <button type="submit" class="search-form__submit"> <i class="icon_search"></i> </button>
-            </form>
-          </div>
-          
-        </div>
-      </div>
-      <div class="col-lg-4">
-        <div class="header-top-nav d-flex justify-content-lg-end justify-content-center">
-          
-          <div class="language-selector header-top-nav__item">
-            <div class="dropdown header-top__dropdown"> 
-                <a class="dropdown-toggle" id="languageID"> EN-AR <i class="fa fa-angle-down"></i></a>
-                <div class="dropdown-menu" id="languagewrapper"> 
-                    @php
-                        if(Session::has('locale')){
-                            $locale = Session::get('locale', Config::get('app.locale'));
-                        }
-                        else{
-                            $locale = 'en';
-                        }
-                    @endphp
-                    @foreach(\App\Language::all() as $language)
-                        <a class="dropdown-item" href="{!! route('language.change',['locale' => $language->code ]) !!}" data-flag="{!! $language->code !!}"><img src="{!! asset('frontend/images/icons/flags/'.$language->code.'.png') !!}" alt="language images"> {!! $language->name !!}</a>
-                    @endforeach
-                </div>
-            </div>
-          </div>
-
-
-          <div class="user-info header-top-nav__item">
-            <div class="dropdown header-top__dropdown"> <a class="dropdown-toggle" id="userID"> My Account <i class="fa fa-angle-down"></i> </a>
-                <div class="dropdown-menu" id="userwrapper"> 
-                    @auth
-                        @if(Auth::user()->user_type != 'admin' && Auth::user()->user_type != 'staff')
-                            <a class="dropdown-item" href="{!! route('dashboard') !!}"><i class="fas fa-user"></i> {!! __('View Profile') !!}</a>
-                            <a class="dropdown-item" href="{!! route('logout') !!}"><i class="fas fa-sign-out-alt"></i> {!! __('Logout') !!}</a>     
-                        @else
-                            <a class="dropdown-item" href="{!! route('user.login') !!}">{!! __('Register Now') !!}</a> 
-                            <a class="dropdown-item" href="{!! route('user.login') !!}">{!! __('Login') !!}</a>
-                         @endif
-                    @else
-                        <a class="dropdown-item" href="{!! route('user.login') !!}">{!! __('Register Now') !!}</a> 
-                        <a class="dropdown-item" href="{!! route('user.login') !!}">{!! __('Login') !!}</a>
-                    @endauth
-                </div>
-            </div>
-          </div>
-          
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="header-middle header-top-1 hide-in-default">
-  <div class="container">
-    <div class="row no-gutters align-items-center">
-      
-      <div class="col-lg-3 col-12 order-lg-1 order-2"> <a href="{!! route('home') !!}" class="logo-box mb-md--30"> <img src="{{ $logo }}" alt="logo"> </a> </div>
-      <div class="col-md-4 col-sm-6 order-lg-2 order-1">
-      </div>
-      <div class="col-lg-5 col-md-7 col-sm-6 order-lg-3 order-3">
-        
-      </div>
-    </div>
-  </div>
-</div>
-<div class="header-bottom header-top-1 position-relative navigation-wrap fixed-header clearfix">
-<div class="container">
-<nav class="wsmenu clearfix">
- <a id="wsnavtoggle" class="wsanimated-arrow"><span></span></a>
- <div class="overlapblackbg"></div>
-         <ul class="wsmenu-list">
-            <li><a href="{!! route('home') !!}" class="logo-box mb-md--30"> <img src="{{ $logo }}" alt="logo"> </a></li>
-            <li aria-haspopup="true"> <a href="#" class="navtext"><i class="fa fa-list-ul" aria-hidden="true"></i> Category</a>
-            <div class="wsshoptabing wtsdepartmentmenu clearfix">
-              <div class="wsshopwp clearfix" style="width:auto;">
-                <ul class="wstabitem clearfix">
-                    @foreach ($categories as $category)
-                    <li class=""><a href="{{ route('products.category', $category->id) }}"><img src="{{ asset($category->icon) }}" style="max-width: 20px;"> {!! __($category->$catname) !!}</a>
-                        <div class="wstitemright clearfix wstitemrightactive" style="height: auto; background:transparent">
-                      <div class="container-fluid">
-                        <div class="row">
-                         @if (count($category->subcategories) > 0)
-                            <div class="col-lg-8 col-md-12 clearfix">
-                                @if (count($category->subcategories) > 0)
-                                    @foreach($category->subcategories as $subcategories)
-                                        <div class="wstheading clearfix"><a href="{{ route('products.subcategory', $subcategories->id) }}">{!! __($subcategories->$catname) !!}</a></div>
-                                        <ul class="wstliststy01 clearfix">
-                                            @if (count($subcategories->subsubcategories) > 0)
-                                                @foreach ($subcategories->subsubcategories as $subsubcategories)
-                                                    <li><a href="{{ route('products.subsubcategory', $subsubcategories->id) }}">{!! __($subsubcategories->$catname) !!}</a></li>
-                                                @endforeach
-                                            @endif
-                                        </ul>
-                                    @endforeach
-                                @endif
+<header class="header_wrap fixed-top dd_dark_skin transparent_header">
+    <div class="light_skin main_menu_uppercase">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg"> 
+                <a class="navbar-brand" href="index.html">
+                    <img class="logo_light" src="{{ asset('frontend/assets/images/logo_light.png')}}" alt="logo" />
+                    <img class="logo_dark" src="{{ asset('frontend/assets/images/logo_dark.png')}}" alt="logo" />
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-expanded="false"> 
+                    <span class="ion-android-menu"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
+                    <ul class="navbar-nav">
+                        <li class="dropdown">
+                            <a data-toggle="dropdown" class="nav-link dropdown-toggle active" href="#">Home</a>
+                            <div class="dropdown-menu">
+                                <ul> 
+                                    <li><a class="dropdown-item nav-link nav_item" href="index.html">Fashion 1</a></li>
+                                    <li><a class="dropdown-item nav-link nav_item" href="index-2.html">Fashion 2</a></li>
+                                    <li><a class="dropdown-item nav-link nav_item" href="index-3.html">Furniture 1</a></li>
+                                    <li><a class="dropdown-item nav-link nav_item active" href="index-4.html">Furniture 2</a></li>
+                                    <li><a class="dropdown-item nav-link nav_item" href="index-5.html">Electronics 1</a></li>
+                                    <li><a class="dropdown-item nav-link nav_item" href="index-6.html">Electronics 2</a></li>
+                                </ul>
+                            </div>   
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown">Pages</a>
+                            <div class="dropdown-menu">
+                                <ul> 
+                                    <li><a class="dropdown-item nav-link nav_item" href="about.html">About Us</a></li> 
+                                    <li><a class="dropdown-item nav-link nav_item" href="contact.html">Contact Us</a></li> 
+                                    <li><a class="dropdown-item nav-link nav_item" href="faq.html">Faq</a></li>
+                                    <li><a class="dropdown-item nav-link nav_item" href="404.html">404 Error Page</a></li>
+                                    <li><a class="dropdown-item nav-link nav_item" href="login.html">Login</a></li>
+                                    <li><a class="dropdown-item nav-link nav_item" href="signup.html">Register</a></li>
+                                    <li><a class="dropdown-item nav-link nav_item" href="term-condition.html">Terms and Conditions</a></li>
+                                </ul>
                             </div>
-                          @endif
-                        </div>
-                      </div>
-                    </div>
+                        </li>
+                        <li class="dropdown dropdown-mega-menu">
+                            <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown">Products</a>
+                            <div class="dropdown-menu">
+                                <ul class="mega-menu d-lg-flex">
+                                            <li class="mega-menu-col col-lg-3">
+                                                <ul> 
+                                                    <li class="dropdown-header">Woman's</li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="shop-list-left-sidebar.html">Vestibulum sed</a></li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="shop-left-sidebar.html">Donec porttitor</a></li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="shop-right-sidebar.html">Donec vitae facilisis</a></li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="shop-list.html">Curabitur tempus</a></li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="shop-load-more.html">Vivamus in tortor</a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="mega-menu-col col-lg-3">
+                                                <ul>
+                                                    <li class="dropdown-header">Men's</li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="shop-cart.html">Donec vitae ante ante</a></li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="checkout.html">Etiam ac rutrum</a></li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="wishlist.html">Quisque condimentum</a></li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="compare.html">Curabitur laoreet</a></li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="order-completed.html">Vivamus in tortor</a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="mega-menu-col col-lg-3">
+                                                <ul>
+                                                    <li class="dropdown-header">Kid's</li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="shop-product-detail.html">Donec vitae facilisis</a></li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="shop-product-detail-left-sidebar.html">Quisque condimentum</a></li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="shop-product-detail-right-sidebar.html">Etiam ac rutrum</a></li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="shop-product-detail-thumbnails-left.html">Donec vitae ante ante</a></li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="shop-product-detail-thumbnails-left.html">Donec porttitor</a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="mega-menu-col col-lg-3">
+                                                <ul>
+                                                    <li class="dropdown-header">Accessories</li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="shop-product-detail.html">Donec vitae facilisis</a></li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="shop-product-detail-left-sidebar.html">Quisque condimentum</a></li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="shop-product-detail-right-sidebar.html">Etiam ac rutrum</a></li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="shop-product-detail-thumbnails-left.html">Donec vitae ante ante</a></li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="shop-product-detail-thumbnails-left.html">Donec porttitor</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                <div class="d-lg-flex menu_banners">
+                                    <div class="col-sm-4">
+                                        <div class="header-banner">
+                                            <img src="{{ asset('frontend/assets/images/menu_banner11.jpg')}}" alt="menu_banner1">
+                                            <div class="banne_info">
+                                                <h6>10% Off</h6>
+                                                <h4>Wooden Chair</h4>
+                                                <a href="#">Shop now</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="header-banner">
+                                            <img src="{{ asset('frontend/assets/images/menu_banner22.jpg')}}" alt="menu_banner2">
+                                            <div class="banne_info">
+                                                <h6>15% Off</h6>
+                                                <h4>Wooden Chair</h4>
+                                                <a href="#">Shop now</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="header-banner">
+                                            <img src="{{ asset('frontend/assets/images/menu_banner33.jpg')}}" alt="menu_banner3">
+                                            <div class="banne_info">
+                                                <h6>23% Off</h6>
+                                                <h4>Wooden Chair</h4>
+                                                <a href="#">Shop now</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown">Blog</a>
+                            <div class="dropdown-menu dropdown-reverse">
+                                <ul>
+                                    <li>
+                                        <a class="dropdown-item menu-link dropdown-toggler" href="#">Grids</a>
+                                        <div class="dropdown-menu">
+                                            <ul> 
+                                                <li><a class="dropdown-item nav-link nav_item" href="blog-three-columns.html">3 columns</a></li>
+                                                <li><a class="dropdown-item nav-link nav_item" href="blog-four-columns.html">4 columns</a></li> 
+                                                <li><a class="dropdown-item nav-link nav_item" href="blog-left-sidebar.html">Left Sidebar</a></li> 
+                                                <li><a class="dropdown-item nav-link nav_item" href="blog-right-sidebar.html">right Sidebar</a></li>
+                                                <li><a class="dropdown-item nav-link nav_item" href="blog-standard-left-sidebar.html">Standard Left Sidebar</a></li> 
+                                                <li><a class="dropdown-item nav-link nav_item" href="blog-standard-right-sidebar.html">Standard right Sidebar</a></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item menu-link dropdown-toggler" href="#">Masonry</a>
+                                        <div class="dropdown-menu">
+                                            <ul> 
+                                                <li><a class="dropdown-item nav-link nav_item" href="blog-masonry-three-columns.html">3 columns</a></li>
+                                                <li><a class="dropdown-item nav-link nav_item" href="blog-masonry-four-columns.html">4 columns</a></li> 
+                                                <li><a class="dropdown-item nav-link nav_item" href="blog-masonry-left-sidebar.html">Left Sidebar</a></li> 
+                                                <li><a class="dropdown-item nav-link nav_item" href="blog-masonry-right-sidebar.html">right Sidebar</a></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item menu-link dropdown-toggler" href="#">Single Post</a>
+                                        <div class="dropdown-menu">
+                                            <ul> 
+                                                <li><a class="dropdown-item nav-link nav_item" href="blog-single.html">Default</a></li>
+                                                <li><a class="dropdown-item nav-link nav_item" href="blog-single-left-sidebar.html">left sidebar</a></li>
+                                                <li><a class="dropdown-item nav-link nav_item" href="blog-single-slider.html">slider post</a></li> 
+                                                <li><a class="dropdown-item nav-link nav_item" href="blog-single-video.html">video post</a></li> 
+                                                <li><a class="dropdown-item nav-link nav_item" href="blog-single-audio.html">audio post</a></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item menu-link dropdown-toggler" href="#">List</a>
+                                        <div class="dropdown-menu">
+                                            <ul> 
+                                                <li><a class="dropdown-item nav-link nav_item" href="blog-list-left-sidebar.html">left sidebar</a></li>
+                                                <li><a class="dropdown-item nav-link nav_item" href="blog-list-right-sidebar.html">right sidebar</a></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="dropdown dropdown-mega-menu">
+                            <a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown">Shop</a>
+                            <div class="dropdown-menu">
+                                <ul class="mega-menu d-lg-flex">
+                                    <li class="mega-menu-col col-lg-9">
+                                        <ul class="d-lg-flex">
+                                            <li class="mega-menu-col col-lg-4">
+                                                <ul> 
+                                                    <li class="dropdown-header">Shop Page Layout</li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="shop-list.html">shop List view</a></li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="shop-list-left-sidebar.html">shop List Left Sidebar</a></li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="shop-list-right-sidebar.html">shop List Right Sidebar</a></li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="shop-left-sidebar.html">Left Sidebar</a></li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="shop-right-sidebar.html">Right Sidebar</a></li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="shop-load-more.html">Shop Load More</a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="mega-menu-col col-lg-4">
+                                                <ul>
+                                                    <li class="dropdown-header">Other Pages</li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="shop-cart.html">Cart</a></li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="checkout.html">Checkout</a></li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="my-account.html">My Account</a></li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="wishlist.html">Wishlist</a></li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="compare.html">compare</a></li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="order-completed.html">Order Completed</a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="mega-menu-col col-lg-4">
+                                                <ul>
+                                                    <li class="dropdown-header">Product Pages</li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="shop-product-detail.html">Default</a></li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="shop-product-detail-left-sidebar.html">Left Sidebar</a></li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="shop-product-detail-right-sidebar.html">Right Sidebar</a></li>
+                                                    <li><a class="dropdown-item nav-link nav_item" href="shop-product-detail-thumbnails-left.html">Thumbnails Left</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="mega-menu-col col-lg-3">
+                                        <div class="header_banner">
+                                            <div class="header_banner_content">
+                                                <div class="shop_banner">
+                                                    <div class="banner_img overlay_bg_40">
+                                                        <img src="{{ asset('frontend/assets/images/shop_banner1.jpg')}}" alt="shop_banner"/>
+                                                    </div> 
+                                                    <div class="shop_bn_content">
+                                                        <h5 class="text-uppercase shop_subtitle">New Collection</h5>
+                                                        <h3 class="text-uppercase shop_title">Sale 30% Off</h3>
+                                                        <a href="#" class="btn btn-white rounded-0 btn-sm text-uppercase">Shop Now</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><a class="nav-link nav_item" href="contact.html">Contact Us</a></li> 
+                    </ul>
+                </div>
+                <ul class="navbar-nav attr-nav align-items-center">
+                    <li><a href="javascript:void(0);" class="nav-link search_trigger"><i class="linearicons-magnifier"></i></a>
+                        <div class="search_wrap">
+                            <span class="close-search"><i class="ion-ios-close-empty"></i></span>
+                            <form>
+                                <input type="text" placeholder="Search" class="form-control" id="search_input">
+                                <button type="submit" class="search_icon"><i class="ion-ios-search-strong"></i></button>
+                            </form>
+                        </div><div class="search_overlay"></div><div class="search_overlay"></div>
                     </li>
-                    @endforeach
+                    <li class="dropdown cart_dropdown"><a class="nav-link cart_trigger" href="#" data-toggle="dropdown"><i class="linearicons-cart"></i><span class="cart_count">2</span></a>
+                        <div class="cart_box dropdown-menu dropdown-menu-right">
+                            <ul class="cart_list">
+                                <li>
+                                    <a href="#" class="item_remove"><i class="ion-close"></i></a>
+                                    <a href="#"><img src="{{ asset('frontend/assets/images/cart_thamb1.jpg')}}" alt="cart_thumb1">Variable product 001</a>
+                                    <span class="cart_quantity"> 1 x <span class="cart_amount"> <span class="price_symbole">$</span></span>78.00</span>
+                                </li>
+                                <li>
+                                    <a href="#" class="item_remove"><i class="ion-close"></i></a>
+                                    <a href="#"><img src="{{ asset('frontend/assets/images/cart_thamb2.jpg')}}" alt="cart_thumb2">Ornare sed consequat</a>
+                                    <span class="cart_quantity"> 1 x <span class="cart_amount"> <span class="price_symbole">$</span></span>81.00</span>
+                                </li>
+                            </ul>
+                            <div class="cart_footer">
+                                <p class="cart_total"><strong>Subtotal:</strong> <span class="cart_price"> <span class="price_symbole">$</span></span>159.00</p>
+                                <p class="cart_buttons"><a href="#" class="btn btn-fill-line view-cart">View Cart</a><a href="#" class="btn btn-fill-out checkout">Checkout</a></p>
+                            </div>
+                        </div>
+                    </li>
                 </ul>
-              </div>
-            </div>
-          </li>
-
-            <li aria-haspopup="true"><a href="{!! route('search') !!}" class="navtext"> {!! __('Products') !!}</a></li>
-            <li aria-haspopup="true"><a href="{{ route('products.subcategory', 4) }}" class="navtext"> {!! __('Women') !!}</a></li>
-            <li aria-haspopup="true"><a href="{{ route('products.subcategory', 5) }}" class="navtext"> {!! __('Men') !!}</a></li>
-            <li aria-haspopup="true"><a href="{{ route('products.category', 5) }}" class="navtext"> {!! __('Accessories') !!}</a></li>
-            <li aria-haspopup="true"><a href="{{ route('brands') }}" class="navtext">{!! __('Brands') !!}</a></li>
-            <li aria-haspopup="true"><a href="{{route('products.offers')}}" class="navtext">{!! __('Offers') !!}</a></li>
-            
-            <li aria-haspopup="true"><a href="#">{!! __('Others') !!}</a>
-                <ul class="sub-menu">
-        			<li><a class="dropdown-item" href="{!! route('products.deals') !!}" class="navtext"> {!! __('Deals') !!}</a></li>
-        			<li><a class="dropdown-item" href="{!! route('dashboard') !!}" class="navtext"> {!! __('Wishlist') !!}</a></li>
-        			<li><a class="dropdown-item" href="{!! route('compare') !!}" class="navtext"> {!! __('Compare List') !!}</a></li>
-                    <li><a href="{!! route('front_cms','about-us') !!}" class="navtext">{!! __('About Us') !!}</a></li>
-                    <li><a href="{!! route('enquiry') !!}" class="navtext"> {!! __('Contact Us') !!}</a></li>
-                    <li><a href="#" class="navtext">{!! __('Privacy Policy') !!}</a></li>
-
-                </ul>
-            </li>
-
-        </ul>
-      </nav>
-</div>
-</div>
+            </nav>
+        </div>
+    </div>
 </header>

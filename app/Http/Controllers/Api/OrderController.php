@@ -217,20 +217,8 @@ class OrderController extends Controller
         if ($validator->fails()) {
             $message = $validator->errors()->all();
         } else {
-            // Some fixations 
-            
             $last_id = Order::latest('id')->first()->id;
             $last_id = 1000 + $last_id;
-            
-            //if(Order::latest('id')->first()==""):
-		    //$last_id  =0;
-	    	//else:
-            //$last_id                = Order::latest('id')->first() ;
-		    //endif;
-		    //$last_id                = 1000 + $last_id;
-		    
-	
-            
             $cartItems = json_decode($request->cart_item,true);
 
             $order  = new Order;
@@ -327,22 +315,16 @@ class OrderController extends Controller
 
                     $order->grand_total = $subtotal + $tax + $shipping + $cod_charge;
                     $order->save();
-                    $result=array(
-                        "order_id"=>$order->id,
-                        "order_code"=>$order->code
-                        );
-                  // $order_id=$order->id;
-                    
-                  //  $pdf = PDF::loadView('invoices.customer_invoice', compact('order'));
-                    //$output = $pdf->output();
-                    //file_put_contents(public_path().'/invoices/'.'Order#'.$order->code.'.pdf', $output);
+                    $pdf = PDF::loadView('invoices.customer_invoice', compact('order'));
+                    $output = $pdf->output();
+                    file_put_contents(public_path().'/invoices/'.'Order#'.$order->code.'.pdf', $output);
 
-                    //$array['view'] = 'emails.invoice';
-                    //$array['subject'] = 'Order Placed - '.$order->code;
-                    //$array['from'] = env('MAIL_USERNAME');
-                    //$array['content'] = 'Hi. Your order has been placed';
-                    //$array['file'] = public_path().'/invoices/Order#'.$order->code.'.pdf';
-                    //$array['file_name'] = 'Order#'.$order->code.'.pdf';
+                    $array['view'] = 'emails.invoice';
+                    $array['subject'] = 'Order Placed - '.$order->code;
+                    $array['from'] = env('MAIL_USERNAME');
+                    $array['content'] = 'Hi. Your order has been placed';
+                    $array['file'] = public_path().'/invoices/Order#'.$order->code.'.pdf';
+                    $array['file_name'] = 'Order#'.$order->code.'.pdf';
 
                     //sends email to customer with the invoice pdf attached
                     if(env('MAIL_USERNAME') != null && env('MAIL_PASSWORD') != null){

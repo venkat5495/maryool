@@ -104,8 +104,7 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label" for="cities">{{__('Cities')}}</label>
                     <div class="col-sm-10">
-						<small>Press and hold CTRL key for multiple selections</small>
-                        <select class="form-control js_required" multiple="multiple" name="cities[]" id="city_ids" data-placeholder="Select City">
+                        <select class="form-control demo-select2-placeholder js_required" multiple="multiple" name="cities[]" id="city_ids" data-placeholder="Select City">
                             @if(!empty($delivery_period->id))
                             @php 
                               $selected_cities = json_decode($delivery_period->cities,true); @endphp

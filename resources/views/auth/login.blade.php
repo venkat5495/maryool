@@ -17,11 +17,7 @@
     <div class="container-fluid">
         <div id="header-logo" class="navbar-header">
             <a href="#" class="navbar-brand">
-            @if($generalsetting->logo != null)
-                <img src="{{ asset($generalsetting->logo) }}" style="max-width:100px">
-            @else
-                <img src="{{ asset('frontend/images/logo/logo.png') }}" style="max-width:100px">
-            @endif
+            Maryool
             </a>
         </div>
     </div>
@@ -87,7 +83,7 @@
             </div>
         </div>
         <div class="col-sm-12">
-            <footer class="text-center"><a href="#">Alfahad</a> © 2009-2020 All Rights Reserved.<br></footer>
+            <footer class="text-center"><a href="#">Maryool</a> © 2009-2020 All Rights Reserved.<br></footer>
         </div>
     </div>
 </div>

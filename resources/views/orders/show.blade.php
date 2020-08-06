@@ -97,7 +97,7 @@
         <div class="panel-body">
             <table class="table table-bordered">
                 <tr><td><strong>Name</strong></td><td>{{ $tr->translate(json_decode($order->shipping_address)->name) }}</td></tr>
-                <tr><td><strong>Email</strong></td><td>{{ isset(json_decode($order->shipping_address)->email) ? $tr->translate(json_decode($order->shipping_address)->email) : " - "}}</td></tr>
+                <tr><td><strong>Email</strong></td><td>{{ $tr->translate(json_decode($order->shipping_address)->email) }}</td></tr>
                 <tr><td><strong>Phone</strong></td><td>{{ $tr->translate(json_decode($order->shipping_address)->phone) }}</td></tr>
                 <tr><td><strong>Address</strong></td><td>{{ $tr->translate(json_decode($order->shipping_address)->address) }}</td></tr>
                 <tr><td><strong>City</strong></td><td>{{ $tr->translate(json_decode($order->shipping_address)->city) }}</td></tr>
@@ -119,7 +119,6 @@
                 <tr><td><strong>{{__('Order Status')}}</strong></td><td>
                     @php
                         $status = $order->orderDetails->first()->delivery_status;
-                        
                     @endphp
                     @if($status == 'delivered')
                         <span class="badge badge-success">{{ ucfirst(str_replace('_', ' ', $status)) }}</span>
@@ -128,7 +127,7 @@
                     @endif
 					</td></tr>
                 <tr><td><strong>{{__('Order Date') }}</strong></td><td>{{ date('d-m-Y H:m A', $order->date) }}</td></tr>
-                <tr><td><strong>{{__('Total amount') }}</strong></td><td>{{ single_price($order->orderDetails->sum('price')+ $order->orderDetails->sum('shipping_cost') + ($order->shipping_charge ?? 00)+($order->cod_charge ?? 00)) }}</td></tr>
+                <tr><td><strong>{{__('Total amount') }}</strong></td><td>{{ single_price($order->orderDetails->sum('price') + $order->orderDetails->sum('tax')) }}</td></tr>
                 <tr><td><strong>{{__('Payment method')}}</strong></td><td>{{ ucfirst(str_replace('_', ' ', $order->payment_type)) }}</td></tr>
             </table>
         </div>
@@ -147,20 +146,12 @@
         <div class="panel-body">
             <table class="table table-bordered">
     			<tbody>
-    			   {{-- <tr><td><strong>{{__('Sub Total')}} :</strong></td><td> {{ single_price($order->orderDetails->where('seller_id', Auth::user()->id)->sum('price')) }}</td></tr>
+    			    <tr><td><strong>{{__('Sub Total')}} :</strong></td><td> {{ single_price($order->orderDetails->where('seller_id', Auth::user()->id)->sum('price')) }}</td></tr>
         			<tr><td><strong>{{__('Tax')}} :</strong></td><td>{{ single_price($order->orderDetails->where('seller_id', Auth::user()->id)->sum('tax')) }}</td></tr>
                     <tr><td><strong>{{__('Shipping')}} :</strong></td><td>{{ single_price($order->orderDetails->where('seller_id', Auth::user()->id)->sum('shipping_cost')) }}</td></tr>
                     <tr><td><strong>{{__('Shipping fee')}} :</strong></td><td>{{ single_price($order->shipping_charge ?? 00) }}</td></tr>
                     <tr><td><strong>{{__('COD Charges')}} :</strong></td><td>{{ single_price($order->cod_charge ?? 00) }}</td></tr>
-        			<tr><td><strong>{{__('TOTAL')}} :</strong></td><td class="text-bold h4">{{ single_price($order->grand_total) }}</td></tr>--}}
-        			
-        			<tr><td><strong>{{__('Sub Total')}} :</strong></td><td> {{ single_price($order->orderDetails->sum('price')- $order->orderDetails->sum('tax')) }}</td></tr>
-        			<tr><td><strong>{{__('Tax')}} :</strong></td><td>{{ single_price($order->orderDetails->sum('tax')) }}</td></tr>
-                    {{--<tr><td><strong>{{__('Shipping')}} :</strong></td><td>{{ single_price($order->orderDetails->sum('shipping_cost')) }}</td></tr>--}}
-                    <tr><td><strong>{{__('Shipping fee')}} :</strong></td><td>{{ single_price($order->shipping_charge ?? 00) }}</td></tr>
-                    <tr><td><strong>{{__('COD Charges')}} :</strong></td><td>{{ single_price($order->cod_charge ?? 00) }}</td></tr>
         			<tr><td><strong>{{__('TOTAL')}} :</strong></td><td class="text-bold h4">{{ single_price($order->grand_total) }}</td></tr>
-        			
     			</tbody>
     		</table>
         </div>
@@ -216,11 +207,7 @@
                                             <td> - </td>
                                         @endif
                                         <td class="">
-                                            @if($orderDetail->product != null )
-                    						    {{ $orderDetail->product->local_sku ?? $orderDetail->product->globle_sku }}
-                    						 @else
-                    						     -
-                    						@endif
+                    						{{ $orderDetail->product->local_sku ?? $orderDetail->product->globle_sku }}
                     					</td>
                                         @if (!empty($imageColorArray))
                                             @php
@@ -233,11 +220,7 @@
                                             </td>
                                         @else
                                             <td>
-                                                @if($orderDetail->product != null )
-                                                    <a href="{!! asset($orderDetail->product->thumbnail_img)  !!}"><img width="50px" src="{!! asset($orderDetail->product->thumbnail_img) !!}" alt="Product Image"></a>
-                                                @else
-                    						     -
-                                                @endif
+                                                <a href="{!! asset($orderDetail->product->thumbnail_img)  !!}"><img width="50px" src="{!! asset($orderDetail->product->thumbnail_img) !!}" alt="Product Image"></a>
                                             </td>
                                         @endif
                 					<td> {{ single_price($orderDetail->price/$orderDetail->quantity) }} </td>

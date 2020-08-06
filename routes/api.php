@@ -65,9 +65,7 @@ Route::group(['middleware' => ['localization']], function () {
     Route::post('/placeorder', 'Api\OrderController@placeorder');
     Route::get('/getoffers', 'Api\UserController@getoffers');
     Route::post('/getofferdetailspage', 'Api\UserController@getofferdetailspage');
-    
-  
-    
+    Route::post('/deleteaddress', 'Api\OrderController@deleteaddress');
     Route::post('/getseealllist', 'Api\CategoryController@getseealllist');
     Route::post('/checkavailableqty', 'Api\OrderController@checkavailableqty');
     Route::get('/getflashdeal', 'Api\OrderController@getflashdeal');
@@ -77,18 +75,14 @@ Route::group(['middleware' => ['localization']], function () {
     Route::post('/get_cities', 'Api\CategoryController@get_cities');
 
 
-   //Route::group(['middleware' => ['auth:api', 'user.token']], function () {
+ //   Route::group(['middleware' => ['auth:api', 'user.token']], function () {
  Route::group(['middleware' => 'auth:api'], function() {
         Route::get('/my_wallet', 'Api\UserController@my_wallet');
-        Route::post('/deleteaddress', 'Api\OrderController@deleteaddress');
         Route::post('/favouriteproduct', 'Api\CategoryController@favouriteproduct');
         Route::post('/submitreview', 'Api\CategoryController@submitreview');
-      //  Route::post('/updateprofiledata', 'Api\UserController@updateprofiledata')->middleware('user.token');
         Route::post('/updateprofiledata', 'Api\UserController@updateprofiledata');
         Route::get('/getprofiledata', 'Api\UserController@getprofiledata');
         Route::post('/getfavouriteproducts', 'Api\CategoryController@getfavouriteproducts');
-        Route::post('/savetomyfavourite', 'Api\CategoryController@addtoFavourite');
-        Route::post('/deletefavourite', 'Api\CategoryController@deleteFavourite');
         Route::post('/changepassword', 'Api\UserController@changepassword');
         Route::post('/getmyorders', 'Api\OrderController@getmyorders');
         Route::post('/addeditaddress', 'Api\OrderController@addeditaddress');

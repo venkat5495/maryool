@@ -79,7 +79,7 @@ class CartController extends Controller
             }*/
         //}
         //else{
-            if($product->quantity > 0 && $product->quantity < $request['quantity']){
+            if($product->quantity <= $request['quantity']){
                 return view('frontend.partials.outOfStockCart');
             }
             $price = $product->unit_price;
@@ -143,31 +143,9 @@ class CartController extends Controller
             $data['shipping'] = $product->shipping_cost;
         }
 
-        // if($request->session()->has('cart')){
-        //     $cart = $request->session()->get('cart', collect([]));
-        //     $cart->push($data);
-        // }
-        // else{
-        //     $cart = collect([$data]);
-        //     $request->session()->put('cart', $cart);
-        // }
-
         if($request->session()->has('cart')){
-            $foundInCart = false;
-            $cart = collect();
-
-            foreach ($request->session()->get('cart') as $key => $cartItem){
-                if($cartItem['id'] == $request->id){                   
-                        $foundInCart = true;
-                        $cartItem['quantity'] += $request['quantity'];                    
-                }
-                $cart->push($cartItem);
-            }
-
-            if (!$foundInCart) {
-                $cart->push($data);
-            }
-            $request->session()->put('cart', $cart);
+            $cart = $request->session()->get('cart', collect([]));
+            $cart->push($data);
         }
         else{
             $cart = collect([$data]);

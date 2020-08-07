@@ -51,6 +51,12 @@ class Handler extends ExceptionHandler
     {
         return parent::render($request, $exception);
     }
+    
+    protected function unauthenticated($request, AuthenticationException $exception)
+{
+     //return response()->json(['error' => 'Unauthenticated'], 401);
+	 return response()->json(['success'=>false, 'data'=>(object)[],'message'=>__('Unauthorize authorization token.')], 401);
+	}
 
     /*protected function unauthenticated($request, AuthenticationException $e) {
         if($request->expectsJson() && !empty($request->hasHeader('accept-lang')) && $request->hasHeader('accept-lang') != '') {

@@ -14,7 +14,7 @@ class DeliveryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+     public function index()
     {
         $delivery_periods = DeliveryPeriod::latest()->get();
         $cities = City::orderBy('city_name_en','asc')->pluck('city_name_en','id')->toArray();

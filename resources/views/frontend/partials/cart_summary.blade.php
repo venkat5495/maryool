@@ -96,9 +96,9 @@
         </table>
        <div class="checkout_btn">
              @if(Auth::check())
-                <a href="{{ route('checkout.shipping_info') }}" class="btn btn-fill-out btn-sm">{{__('Proceed to Checkout')}}</a>
+                <a href="{{ route('checkout.shipping_info') }}" class="btn btn-medium btn-style-3">{{__('Proceed to Checkout')}}</a>
             @else
-                <a href="javascript:void(0);" class="btn btn-fill-out btn-sm" onclick="showCheckoutModal()">{{__('Proceed to Checkout')}}</a>
+                <a href="javascript:void(0);" class="btn btn-medium btn-style-3" onclick="showCheckoutModal()">{{__('Proceed to Checkout')}}</a>
             @endif
        </div>
     </div>

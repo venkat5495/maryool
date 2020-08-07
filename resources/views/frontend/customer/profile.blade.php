@@ -1,30 +1,31 @@
-<div class="card">
-    <div class="card-header">
-        <h3>Account Details</h3>
-    </div>
-    <div class="card-body">
-        <p>Already have an account? <a href="#">Log in instead!</a></p>
-        <form method="post" name="enq" action="{{ route('customer.profile.update') }}">
-            @csrf
-            @foreach (\App\Country::where('code','SA')->get() as $key => $country)
-                <input type="hidden" name="country" value="{{ $country->code }}">
-            @endforeach
-            <div class="row">
-                <div class="form-group col-md-6">
+<style>.error { margin-top: -10px; margin-bottom: 10px; color: #bf3e3e; }</style>
+<div class="login">
+    <div class="login_form_container">
+        <div class="account_login_form">
+            <form class="login-reg-box p-4" action="{{ route('customer.profile.update') }}" method="POST" enctype="multipart/form-data" style="height: auto;">
+                @csrf
+                <div class="form__group mb--20">
                     <label class="form__label">{{__('Your Name')}}</label>
-                    <input type="text" placeholder="{{__('Your Name')}}" name="name" value="{{ old('name',Auth::user()->name) }}" class="form-control">
-                 </div>
-                 <div class="form-group col-md-6">
+                    <input type="text" placeholder="{{__('Your Name')}}" name="name" value="{{ old('name',Auth::user()->name) }}" class="form__input form__input--2">
+                </div>
+                
+                <div class="form__group mb--20">
                     <label class="form__label">Email</label>
-                    <input type="email" placeholder="{{__('Your Email')}}" name="email" value="{{ old('email',Auth::user()->email) }}" class="form-control">
+                    <input type="email" placeholder="{{__('Your Email')}}" name="email" value="{{ old('email',Auth::user()->email) }}" class="form__input form__input--2">
                 </div>
-                <div class="form-group col-md-12">
+                
+                <div class="form__group mb--20">
                     <label class="form__label">{{__('Address')}}</label>
-                    <input type="text"  placeholder="Your Address" value="{{ old('address',Auth::user()->address) }}" name="address" class="form-control">
+                    <input type="text"  placeholder="Your Address" value="{{ old('address',Auth::user()->address) }}" name="address" class="form__input form__input--2">
                 </div>
-                <div class="form-group col-md-12">
+                
+                @foreach (\App\Country::where('code','SA')->get() as $key => $country)
+                    <input type="hidden" name="country" value="{{ $country->code }}">
+                @endforeach
+
+                <div class="mb-20 form-group">
                     <label class="form__label">{{__('State')}}</label>
-                    <select class="form-control demo-select2-placeholder" name="state" id="profile_state" required>
+                    <select class="form__input form__input--2 demo-select2-placeholder" name="state" id="profile_state" required>
                         <option value="">{!! __('Select State') !!}</option>
                         @php
                             if (session('locale') == "en"){
@@ -41,9 +42,10 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="form-group col-md-12">
+
+                <div class="form__group mb--20">
                     <label class="control-label">{{__('City')}}</label>
-                    <select class="form-control demo-select2-placeholder" name="city" id="profile_city" required>
+                    <select class="form__input form__input--2 demo-select2-placeholder" name="city" id="profile_city" required>
                         <option value="">{!! __('Select City') !!}</option>
                         @php
                             if (session('locale') == "en"){
@@ -60,15 +62,22 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="form-group col-md-12">
+
+
+                
+            
+                <div class="form__group mb--20">
                     <label class="form__label">{{__('Phone')}}</label>
-                     <input type="text" class="form-control mb-3" placeholder="Your Phone Number" name="phone" value="{{old('phone', Auth::user()->phone)}}">
+                    <input type="text" class="form__input form__input--2 mb-3" placeholder="Your Phone Number" name="phone" value="{{old('phone', Auth::user()->phone)}}">
+
                 </div>
                 
-                <div class="col-md-12">
-                    <button type="submit" class="btn btn-fill-out" name="submit" value="Submit">{{__('Update Profile')}}</button>
+                <div class="form__group mb--20">
+                    <div class="save_button primary_btn default_button">
+                        <button class="btn btn-5 btn-style-1 color-1" type="submit">{{__('Update Profile')}}</button>
+                    </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>

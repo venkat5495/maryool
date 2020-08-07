@@ -49,10 +49,12 @@
                         {{-- <td>{{$delivery->total_invoice_amount}}</td> --}}
                         <td>
                             @foreach(json_decode($delivery->cities,true) as $k => $v)
-                                {{$cities[$v]}}
-                                @if(!$loop->last)
-                                    {{','}}
-                                @endif
+                                @isset($cities[$v])
+                                    {{$cities[$v]}}
+                                    @if(!$loop->last)
+                                        {{','}}
+                                    @endif
+                                @endisset
                             @endforeach
                         </td>
                         <td>

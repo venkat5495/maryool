@@ -25,26 +25,19 @@
     </style>
 
 <!--breadcrumbs area start-->
-<div class="breadcrumb_section bg_gray page-title-mini">
-    <div class="container"><!-- STRART CONTAINER -->
-        <div class="row align-items-center">
-        	<div class="col-md-6">
-                <div class="page-title">
-            		<h1>{!! __('Checkout') !!}</h1>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <ol class="breadcrumb justify-content-md-end">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Checkout</li>
-                </ol>
+<div class="breadcrumb-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1 class="page-title">{!! __('Checkout') !!}</h1>
             </div>
         </div>
-    </div><!-- END CONTAINER-->
+    </div>
 </div>
 
+
 <!--breadcrumbs area end-->
-<div class="main_content" style="margin-top:10px;">
+
     <!--Checkout page section-->
     <div class="Checkout_section" id="page-content">
        <div class="container">
@@ -72,10 +65,10 @@
                         <div class="col-sm-12">
                             <ul class="nav nav-tabs">
                     	        <li class="active">
-                    	            <a data-toggle="tab" href="#tab-2" aria-expanded="true" class="btn btn-fill-out btn-sm active">{{__('My Address')}}</a> &nbsp;&nbsp;
+                    	            <a data-toggle="tab" href="#tab-2" aria-expanded="true" class="btn btn-5 btn-style-1 color-1 active">{{__('My Address')}}</a> &nbsp;&nbsp;
                                 </li>
                     	        <li>
-                    	            <a data-toggle="tab" href="#tab-1" aria-expanded="true" class="btn btn-fill-out btn-sm color-1">{{__('Add New')}}</a>
+                    	            <a data-toggle="tab" href="#tab-1" aria-expanded="true" class="btn btn-5 btn-style-1 color-1">{{__('Add New')}}</a>
                     	        </li>
                     	    </ul>
                         </div>
@@ -201,7 +194,7 @@
                         <div class="payment_method pull-right">
                             <div class="order_button">
                                 <strong><span style="color: red;" id="city_error"></span></strong><br>
-                                <button type="button" onclick="getPaymentInfo()" class="btn btn-fill-out btn-sm">
+                                <button type="button" onclick="getPaymentInfo()" class="btn btn-style-3">
                                     <i class="fa fa-spin fa-spinner c-preloader js_loader" style="display:none"></i> {{__('Continue to Payment')}}
                                 </button>
                             </div>
@@ -282,6 +275,5 @@
             </div>
         </div>
     </div>
-</div>
 </div>
 @endsection

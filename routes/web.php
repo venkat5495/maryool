@@ -34,7 +34,6 @@ Route::get('/users/registration', 'HomeController@registration')->name('user.reg
 Route::any('/users/store', 'HomeController@store')->name('user.store');
 
 Route::post('/users/login', 'HomeController@user_login')->name('user.login.submit');
-//Route::post('/users/register', 'HomeController@register')->name('user.register.submit');
 Route::post('/users/login/cart', 'HomeController@cart_login')->name('cart.login.submit');
 
 

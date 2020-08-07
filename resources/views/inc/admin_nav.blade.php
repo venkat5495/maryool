@@ -15,11 +15,9 @@
                 @else
                     <img src="{{ asset('img/logo_shop.png') }}" class="brand-icon" alt="{{ $generalsetting->site_name }}">
                 @endif
-				<!--
                 <div class="brand-title">
                     <span class="brand-text">{{ $generalsetting->site_name }}</span>
                 </div>
-				-->
             </a>
         </div>
         @else

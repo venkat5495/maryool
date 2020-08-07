@@ -85,7 +85,7 @@ class HomeController extends Controller
         if(Auth::check()) {
             return redirect()->route('home');
         }
-        return view('frontend.register');
+        return view('frontend.login-register');
     }
 
     public function user_login(Request $request)
@@ -1330,9 +1330,9 @@ class HomeController extends Controller
                 }
 
                 if (session('locale') == "en"){
-                    $html .="<option value='".$value->city_name_en."'  ".$selected.">".$value->city_name_en."</option>";
+                    $html .="<option value='".$value->id."'  ".$selected.">".$value->city_name_en."</option>";
                 }else{
-                    $html .="<option value='".$value->city_name_ar."' ".$selected.">".$value->city_name_ar."</option>";
+                    $html .="<option value='".$value->id."' ".$selected.">".$value->city_name_ar."</option>";
                 }
             }
         }

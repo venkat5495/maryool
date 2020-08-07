@@ -1,4 +1,4 @@
-@extends('frontend.layouts.blank')
+@extends('frontend.layouts.app')
 
 @section('content')
 <!-- Main Wrapper Start -->

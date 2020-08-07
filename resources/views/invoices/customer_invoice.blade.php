@@ -126,8 +126,12 @@
             </thead>
             <tbody class="strong">
             <?php
+			$total_price_before_tax=0;
             foreach ($order->orderDetails as $key => $orderDetail)
             {
+				$calculation=(\App\TaxSetting::value('tax_setting')*1/100)+1;
+                $total_before_taxt=$orderDetail->price/$calculation;
+				$total_price_before_tax+=$total_before_taxt;
                 if (isset($orderDetail->product->color_images) and !empty($orderDetail->product->color_images))
                 {
                     $imageColorArray = json_decode($orderDetail->product->color_images,true);
@@ -170,12 +174,8 @@
                
                     
                     
-                      @if(\App\TaxSetting::value('is_product_price_incl_tax')=="Yes")
-                           
-                     @php 
-                       $calculation=(\App\TaxSetting::value('tax_setting')*1/100)+1;
-                       $total_before_taxt=$orderDetail->price/$calculation;
-                       @endphp
+                    @if(\App\TaxSetting::value('is_product_price_incl_tax')=="Yes")                          
+                    
                     <td class="gry-color"><?= single_price( $total_before_taxt) ?></td>
                     @else
                     
@@ -196,18 +196,29 @@
             </tbody>
         </table>
     </div>
-
+	@php
+		$grandTotal=0;
+		$grandTotal=$order->orderDetails->sum('price')+$order->orderDetails->sum('shipping_cost')+$order->shipping_charge+$order->cod_charge;
+	@endphp
     <div style="padding:0 1.5rem;">
         <table style="width: 40%;margin-left:auto;" class="text-right sm-padding small strong">
             <tbody>
+			<tr>
+                <th class="gry-color text-left">Price Before Tax</th>
+                <td>{{ single_price($total_price_before_tax) }}</td>
+            </tr>
+			<tr class="border-bottom">
+                <th class="gry-color text-left">Total Tax</th>
+                <td>{{ single_price($order->orderDetails->sum('tax')) }}</td>
+            </tr>
             <tr>
-                <th class="gry-color text-left">Sub Total</th>
+                <th class="gry-color text-left">Total Products Price</th>
                 <td>{{ single_price($order->orderDetails->sum('price')) }}</td>
             </tr>
-            <tr>
+           <!-- <tr>
                 <th class="gry-color text-left">Shipping Cost</th>
                 <td>{{ single_price($order->orderDetails->sum('shipping_cost')) }}</td>
-            </tr>
+            </tr> -->
             <tr>
                 <th class="gry-color text-left">Shipping fee</th>
                 <td>{{ single_price($order->shipping_charge ?? 00) }}</td>
@@ -215,14 +226,10 @@
             <tr>
                 <th class="gry-color text-left">COD Charges</th>
                 <td>{{ single_price($order->cod_charge ?? 00) }}</td>
-            </tr>
-            <tr class="border-bottom">
-                <th class="gry-color text-left">Total Tax</th>
-                <td>{{ single_price($order->orderDetails->sum('tax')) }}</td>
-            </tr>
+            </tr>           
             <tr>
                 <th class="text-left strong">Grand Total</th>
-                <td>{{ single_price($order->grand_total) }}</td>
+                <td>{{ single_price($grandTotal) }}</td>
             </tr>
             </tbody>
         </table>

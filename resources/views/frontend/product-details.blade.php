@@ -1,4 +1,4 @@
-@extends('frontend.layouts.blank')
+@extends('frontend.layouts.app')
 @php
 if(\App\Language::where('code', Session::get('locale', Config::get('app.locale')))->first()->rtl == 1)
 {
@@ -38,317 +38,410 @@ $sizewiseproducts  = \App\Product::where([['size', '=', $product->size]])->get()
     .product-details-tab-link {color:#a8741a !important;}
 </style>
     <!-- Breadcumb area Start -->
-	
-	<div class="breadcrumb_section bg_gray page-title-mini">
-    <div class="container"><!-- STRART CONTAINER -->
-        <div class="row align-items-center">
-        	<div class="col-md-6">
-                <div class="page-title">
-            		<h1>{!! __('Product Detail') !!}</h1>
-                </div>
+    <div class="breadcrumb-area">
+        <div class="container">
+          <div class="row">
+            <div class="col-12 text-center">
+              <h1 class="page-title">{!! __('Product Detail') !!}</h1>
             </div>
-            <div class="col-md-6">
-                <ol class="breadcrumb justify-content-md-end">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Product Detail</li>
-                </ol>
-            </div>
-        </div>
-    </div><!-- END CONTAINER-->
-</div>
-<div class="main_content">
-<!-- START SECTION SHOP -->
-<div class="section">
-	<div class="container">
-		<div class="row">
-            <div class="col-lg-6 col-md-6 mb-4 mb-md-0">
-              <div class="product-image">
-                    <div class="product_img_box">
-                        <img id="product_img" src='assets/images/product_img1.jpg' data-zoom-image="assets/images/product_zoom_img1.jpg" alt="product_img1" />
-                        <a href="#" class="product_img_zoom" title="Zoom">
-                            <span class="linearicons-zoom-in"></span>
-                        </a>
-                    </div>
-                    <div id="pr_item_gallery" class="product_gallery_item slick_slider" data-slides-to-show="4" data-slides-to-scroll="1" data-infinite="false">
-                        @php $j = 1; @endphp
-                        @foreach($modalwiseproducts as $single)
-						<div class="item">
-                            <a href="#"  class="product_gallery_item active" data-image="{{ asset($single->thumbnail_img) }}" data-zoom-image="{{ asset($single->thumbnail_img) }}">
-                                <img src="{{ asset($single->thumbnail_img) }}" alt="product_small_img1" />
-                            </a>
-                        </div>
-                        @php $j++ @endphp
-                        @endforeach
-                        
-                       
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-6">
-			<form class="col-lg-6" id="option-choice-form" style="display:inline">
-              @csrf
-                <div class="pr_detail">
-                    <div class="product_description">
-                        <h4 class="product_title"><a href="#">{!! __($product->name) !!} {!! __($product->modal_no) !!}</a></h4>
-                        <input type="hidden" name="id" value="{{ $product->id }}">
-						<div class="product_price">
-																		
-                            <span class="price">{!! home_price($product) !!}</span>
-                            <del>{{home_discounted_price($product)}}</del>
-                            <div class="on_sale">
-                                <span>{!! floor($product->discount) !!}% Off</span>
-                            </div>
-                        </div>
-                        <div class="rating_wrap">
-                                <!--<div class="rating">
-                                    <div class="product_rate" style="width:80%"></div>
-                                </div>-->
-								@if ($product->total_comment > 0)
-									@for ($i = 0; $i < floor($product->avg_rating); $i++)
-										<i class="fa fa-star rated"></i>
-									@endfor
-									@for ($i = 0; $i < ceil(5-$product->avg_rating); $i++)
-										<i class="fa fa-star-o"></i>
-									@endfor
-                                @endif
-                           <span class="rating_num">({{$product->total_comment}})</span>
-                        </div>
-                        <div class="pr_desc">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus blandit massa enim. Nullam id varius nunc id varius nunc.</p>
-                        </div>
-                        <div class="product_sort_info">
-                            <ul>
-                                <li><i class="linearicons-shield-check"></i> 1 Year AL Jazeera Brand Warranty</li>
-                                <li><i class="linearicons-sync"></i> 30 Day Return Policy</li>
-                                <li><i class="linearicons-bag-dollar"></i> Cash on Delivery available</li>
-                            </ul>
-                        </div>
-                        <div class="pr_switch_wrap">
-                            <span class="switch_lable">Color</span>
-                            <div class="product_color_switch">
-                                <span class="active" data-color="#87554B"></span>
-                                <span data-color="#333333"></span>
-                                <span data-color="#DA323F"></span>
-                            </div>
-                        </div>
-                        <div class="pr_switch_wrap">
-                            <span class="switch_lable">Size</span>
-                            <div class="product_size_switch">
-                                <span>xs</span>
-                                <span>s</span>
-                                <span>m</span>
-                                <span>l</span>
-                                <span>xl</span>
-                            </div>
-                        </div>
-                    </div>
-                    <hr />
-                    <div class="cart_extra">
-                        <div class="cart-product-quantity">
-                            <div class="quantity">
-                                <input type="button" value="-" class="minus">
-                                <input type="text" id="quantity" name="quantity" value="1" title="Qty" class="qty quantity-input" min="{{ generalsettingdata('min_qty') }}" max="{!! generalsettingdata('max_qty') !!}">
-									
-                                <input type="button" value="+" class="plus">
-                            </div>
-                        </div>
-                        <div class="cart_btn">
-                            <button class="btn btn-fill-out btn-addtocart" type="button" onclick="addToCart()"><i class="icon-basket-loaded"></i> {!! __('Add to cart') !!}</button>
-                            <a class="add_compare" href="javascript:void(0)" onclick="addToCompare({{ $product->id }})"><i class="icon-shuffle"></i></a>
-                            <a class="add_wishlist" href="javascript:void(0)" onclick="addToWishList({{ $product->id }})"><i class="icon-heart"></i></a>
-                        </div>
-                    </div>
-                    <hr />
-                    <ul class="product-meta">
-                        <li>SKU: <a href="#">BE45VGRT</a></li>
-                        <li>Category: <a href="#">Clothing</a></li>
-                        <li>Tags: <a href="#" rel="tag">Cloth</a>, <a href="#" rel="tag">printed</a> </li>
-                    </ul>
-                    
-                    <div class="product_share">
-                        <span>Share:</span>
-                        <ul class="social_icons">
-                            <li><a href="#"><i class="ion-social-facebook"></i></a></li>
-                            <li><a href="#"><i class="ion-social-twitter"></i></a></li>
-                            <li><a href="#"><i class="ion-social-googleplus"></i></a></li>
-                            <li><a href="#"><i class="ion-social-youtube-outline"></i></a></li>
-                            <li><a href="#"><i class="ion-social-instagram-outline"></i></a></li>
-                        </ul>
-                    </div>
-                </div>
-				</form>
-            </div>
-        </div>
-        <div class="row">
-        	<div class="col-12">
-            	<div class="large_divider clearfix"></div>
-            </div>
-        </div>
-        <div class="row">
-        	<div class="col-12">
-            	<div class="tab-style3">
-					<ul class="nav nav-tabs" role="tablist">
-						<li class="nav-item">
-							<a class="nav-link active" id="Description-tab" data-toggle="tab" href="#Description" role="tab" aria-controls="Description" aria-selected="true">Description</a>
-                      	</li>
-                      	<li class="nav-item">
-                        	<a class="nav-link" id="Additional-info-tab" data-toggle="tab" href="#Additional-info" role="tab" aria-controls="Additional-info" aria-selected="false">Additional info</a>
-                      	</li>
-                      	<li class="nav-item">
-                        	<a class="nav-link" id="Reviews-tab" data-toggle="tab" href="#Reviews" role="tab" aria-controls="Reviews" aria-selected="false">Reviews (2)</a>
-                      	</li>
-                    </ul>
-                	<div class="tab-content shop_info_tab">
-                      	<div class="tab-pane fade show active" id="Description" role="tabpanel" aria-labelledby="Description-tab">
-                        	<p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Vivamus bibendum magna Lorem ipsum dolor sit amet, consectetur adipiscing elit.Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.</p>
-                        	<p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.</p>
-                      	</div>
-                      	<div class="tab-pane fade" id="Additional-info" role="tabpanel" aria-labelledby="Additional-info-tab">
-                        	<table class="table table-bordered">
-                            	<tr>
-                                	<td>Capacity</td>
-                                	<td>5 Kg</td>
-                            	</tr>
-                                <tr>
-                                    <td>Color</td>
-                                    <td>Black, Brown, Red,</td>
-                                </tr>
-                                <tr>
-                                    <td>Water Resistant</td>
-                                    <td>Yes</td>
-                                </tr>
-                                <tr>
-                                    <td>Material</td>
-                                    <td>Artificial Leather</td>
-                                </tr>
-                        	</table>
-                      	</div>
-                      	<div class="tab-pane fade" id="Reviews" role="tabpanel" aria-labelledby="Reviews-tab">
-                        	<div class="comments">
-                            	<h5 class="product_tab_title">2 Review For <span>Blue Dress For Woman</span></h5>
-                                <ul class="list_none comment_list mt-4">
-                                    <li>
-                                        <div class="comment_img">
-                                            <img src="assets/images/user1.jpg" alt="user1"/>
-                                        </div>
-                                        <div class="comment_block">
-                                            <div class="rating_wrap">
-                                                <div class="rating">
-                                                    <div class="product_rate" style="width:80%"></div>
-                                                </div>
-                                            </div>
-                                            <p class="customer_meta">
-                                                <span class="review_author">Alea Brooks</span>
-                                                <span class="comment-date">March 5, 2018</span>
-                                            </p>
-                                            <div class="description">
-                                                <p>Lorem Ipsumin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate</p>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="comment_img">
-                                            <img src="assets/images/user2.jpg" alt="user2"/>
-                                        </div>
-                                        <div class="comment_block">
-                                            <div class="rating_wrap">
-                                                <div class="rating">
-                                                    <div class="product_rate" style="width:60%"></div>
-                                                </div>
-                                            </div>
-                                            <p class="customer_meta">
-                                                <span class="review_author">Grace Wong</span>
-                                                <span class="comment-date">June 17, 2018</span>
-                                            </p>
-                                            <div class="description">
-                                                <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters</p>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                        	</div>
-                            <div class="review_form field_form">
-                                <h5>Add a review</h5>
-                                <form class="row mt-3">
-                                    <div class="form-group col-12">
-                                        <div class="star_rating">
-                                            <span data-value="1"><i class="far fa-star"></i></span>
-                                            <span data-value="2"><i class="far fa-star"></i></span> 
-                                            <span data-value="3"><i class="far fa-star"></i></span>
-                                            <span data-value="4"><i class="far fa-star"></i></span>
-                                            <span data-value="5"><i class="far fa-star"></i></span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-12">
-                                        <textarea required="required" placeholder="Your review *" class="form-control" name="message" rows="4"></textarea>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <input required="required" placeholder="Enter Name *" class="form-control" name="name" type="text">
-                                     </div>
-                                    <div class="form-group col-md-6">
-                                        <input required="required" placeholder="Enter Email *" class="form-control" name="email" type="email">
-                                    </div>
-                                   
-                                    <div class="form-group col-12">
-                                        <button type="submit" class="btn btn-fill-out" name="submit" value="Submit">Submit Review</button>
-                                    </div>
-                                </form>
-                            </div>
-                      	</div>
-                	</div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-        	<div class="col-12">
-            	<div class="small_divider"></div>
-            	<div class="divider"></div>
-                <div class="medium_divider"></div>
-            </div>
-        </div>
-        <div class="row">
-        	<div class="col-12">
-            	<div class="heading_s1">
-                	<h3>Releted Products</h3>
-                </div>
-            	<div class="releted_product_slider carousel_slider owl-carousel owl-theme" data-margin="20" data-responsive='{"0":{"items": "1"}, "481":{"items": "2"}, "768":{"items": "3"}, "1199":{"items": "4"}}'>
-                	 @php 
-					$k = 1; 
-					$same_brand_array = array();
-					@endphp
-					@foreach($sizewiseproducts as $key => $product)
-						@php
-						if(!in_array($product->brand_id, $same_brand_array))
-						{
-							$same_brand_array[] = $product->brand_id;
-							if($k == 11){ break; }
-							$brand = (\App\Brand::whereid($product->brand_id)->first()); @endphp
-							@include('frontend.single_product')
-						@php $k = $k+1; 
-						}
-						@endphp
-					@endforeach
-					
-					@php if($k < 11) { @endphp
-						@foreach($modalwiseproducts as $key => $product)
-							<?php
-							if(!in_array($product->brand_id, $same_brand_array))
-							{
-								if($k == 11){
-									break;
-								}
-								$brand = (\App\Brand::whereid($product->brand_id)->first()); ?>
-								@include('frontend.single_product')
-							<?php } ?>
-						@endforeach
-					@php $k = $k+1; @endphp
-					@php } @endphp
-                </div>
-            </div>
+          </div>
         </div>
     </div>
+    <!-- Breadcumb area End --> 
+
+    <!-- Main Content Wrapper Start -->
+    <div class="main-content-wrapper">
+        <div class="single-products-area section-padding section-md-padding">
+            <div class="container"> 
+                <!-- Single Product Start -->
+                <section class="mirora-single-product pb--80 pb-md--60">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="product-shadow clearfix">
+                                <div class="tab-content product-details-thumb-large" id="myTabContent-3">
+                                    @php $j = 1; @endphp
+                                    @foreach($modalwiseproducts as $single)
+                                    <div class="tab-pane fade @php echo ($j==1)?'active show':''; @endphp" id="product-large-<?= $single->id ?>">
+                                        <div class="product-details-img easyzoom"> 
+                                            <a class="popup-btn" href="{!! asset($single->thumbnail_img) !!}"> 
+                                                <img src="{{ asset($single->thumbnail_img) }}" alt="Product" style="max-width: 60%;"> 
+                                            </a> 
+                                        </div>
+                                    </div>
+                                    @php $j++ @endphp
+                                    @endforeach
+                                </div>
+                                    
+                                <div class="product-details-thumbnail">
+                                    @php $first_time = 1 @endphp
+                                    @if (!empty(json_decode($product->photos)) || !empty($modalwiseproducts))
+                                        <div class="thumb-menu product-details-thumb-menu nav-vertical-center thumbmenu-horizontal">
+                                            @foreach($modalwiseproducts as $single)
+                                            <div class="thumb-menu-item {{$single->id}} @php echo ($first_time==1)?'active':''; @endphp">
+                                                <a  href="#product-large-<?= $single->id ?>" data-toggle="tab" class="nav-link" onclick="getajaxproduct('{{$single->id}}')">
+                                                    <img src="{{ asset($single->thumbnail_img) }}" alt="Product"/>
+                                                </a>
+                                            </div>
+                                            @php $first_time++ @endphp
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        <form class="col-lg-6" id="option-choice-form">
+                        @csrf
+                        <div class="product-details-content">
+                            <div class="product-details-top">
+                                <h2 class="product-details-name">{!! __($product->name) !!} {!! __($product->modal_no) !!}</h2>
+                                <input type="hidden" name="id" value="{{ $product->id }}">
+                                <div class="ratings-wrap">
+                                    <div class="ratings"> 
+                                        @if ($product->total_comment > 0)
+                                            @for ($i = 0; $i < floor($product->avg_rating); $i++)
+                                                <i class="fa fa-star rated"></i>
+                                            @endfor
+                                            @for ($i = 0; $i < ceil(5-$product->avg_rating); $i++)
+                                                <i class="fa fa-star-o"></i>
+                                            @endfor
+                                        @endif
+                                        <span> 
+                                            <a class="review-btn" href="#singleProductTab">{!! $product->total_comment !!} {{__('Reviews')}}</a> 
+                                            <a class="review-btn" href="#singleProductTab" style="border-right: 1px solid #ccc;margin-right: 1rem;padding-right: 1rem;">{!! __('Write a review') !!}</a> 
+                                            <a class="review-btn" href="#singleProductTab"> {!! $totalvisitor !!} <i class="fa fa-eye"></i></a>
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <table class="table table-bordered">
+                                    <tr><th>Brand</th><td><a href="{{ route('products.brand', $product->brand->id) }}">{{$product->brand->name}}</a></td></tr>
+                                    @if(!empty($product->modal_no))<tr><th>Modal no</th><td>{{$product->modal_no}}</td></tr>@endif
+                                    <tr><th>{!! __('Availability') !!}</th> <td>
+                                        <span id="availability_div">
+                                            @if(!empty($product->quantity) && $product->quantity > 0)  
+                                                {!! __('In Stock') !!}
+                                            @else
+                                                {!! __('Out of Stock') !!}
+                                            @endif
+                                        </span>
+                                    </td></tr>
+                                    @if(!empty($product->size))<tr><th>Size</th><td>{{$product->size}}</td></tr>@endif
+                                    <?php
+                                    if(!empty($product->category_id))
+                                    {
+                                        $cat_arr = json_decode($product->category_id);
+                                        if(!empty($cat_arr))
+                                        {
+                                            foreach($cat_arr as $cat)
+                                            { ?>
+                                            <tr><th>{!! __('Category') !!}</th><td><a href="{{ route('products.category', $cat) }}">{{ \App\Category::where('id',$cat)->first()->name }}</a></td></tr>
+                                            <?php }
+                                        }
+                                    }
+                                    ?>
+                                    <?php
+                                    if(!empty($product->subcategory_id))
+                                    {
+                                        $subcat_arr = json_decode($product->subcategory_id);
+                                        if(!empty($subcat_arr))
+                                        {
+                                            foreach($subcat_arr as $subcat)
+                                            { ?>
+                                            <tr><th>{!! __('Sub Category') !!}</th><td><a href="{{ route('products.subcategory', $subcat) }}">{{ \App\Subcategory::where('id',$subcat)->first()->name }}</a></td></tr>
+                                            <?php }
+                                        }
+                                    }
+                                    ?>
+                                    <tr>
+                                        <td colspan="2">
+                                            <div class="product-details-price-wrapper"> 
+                                                @if (home_price($product) != home_discounted_price($product))
+                                                    <span style="color: #332f2f;">-{!! floor($product->discount) !!}% |</span>
+                                                @endif
+                                                <span class="money">{!! home_discounted_price($product)  !!}</span>
+                                                @if (home_price($product) != home_discounted_price($product))
+                                                    | <span class="product-price-old"> <span class="money">{!! home_price($product) !!}</span> </span>
+                                                @endif
+            
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div class="product-details-bottom">
+                                <div class="product-details-price-wrapper d-none" style="margin-bottom: 25px" id="chosen_price_div">
+                                    <span class="money" style="color:#222222">{{__('Total Price')}}: </span> <span class="money" id="chosen_price"></span>
+                                </div>
+                                <div class="product-details-action-wrapper mb--20">
+                                    <div class="product-details-action-top d-flex align-items-center mb--20">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <div class="quantity"> <span>{!! __('Qty') !!}: </span>
+                                                    <input id="quantity" min="{{ generalsettingdata('min_qty') }}" max="{!! generalsettingdata('max_qty') !!}" name="quantity" value="1" type="number" class="quantity-input">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-9" style="line-height:50px">
+                                                <button class="btn btn-medium btn-style-2 add-to-cart" onclick="addToCart()" type="button">{!! __('Add to cart') !!}</button> &nbsp;
+                                                <button class="btn btn-medium btn-style-2 add-to-cart" onclick="addToWishList({{ $product->id }})" type="button">{{__('Add to wishlist')}}</button> &nbsp;
+                                                <button class="btn btn-medium btn-style-2 add-to-cart" onclick="addToCompare({{ $product->id }})" type="button">{{__('Add to compare')}}</button> &nbsp;
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @if(!empty($product->colors) && count(json_decode($product->colors)) > 0)
+                                    @php
+                                    $product_color = json_decode($product->colors);
+                                    @endphp
+                                    @if(!empty($product_color) && count($product_color) == 0)
+                                        @foreach ($product_color as $key => $color)
+                                            <input type="hidden" id="{{ $product->id }}-color-{{ $key }}" name="color" data-colorname="{{json_decode($product->colorname)[$key]}}" value="{{ $color }}" checked>
+                                        @endforeach
+                                    @else
+
+                                        <div class="product_variant color coloroption clearfix" style="margin-bottom: 25px;">
+                                            <p class="product-details-tags"> {!! __('Color') !!}:</p>
+                                            <div class="d-block w-100">
+                                                <ul class="list-inline checkbox-color mb-1" style="width: 100%;">
+                                                    @php $c = 1; @endphp
+                                                    @foreach ($product_color as $key => $color)
+                                                    <li>
+                                                        <input type="radio" id="{{ $product->id }}-color-{{ $key }}" name="color" data-colorname="{{json_decode($product->colorname)[$key]}}" value="{{ $color }}">
+                                                        <label style="background: {{ $color }};" for="{{ $product->id }}-color-{{ $key }}" data-toggle="tooltip" title="{{json_decode($product->colorname)[$key]}}"></label>
+                                                    </li>
+                                                    @php $c = $c+1; @endphp
+                                                    @endforeach
+                                                    
+                                                </ul>
+                                                <P id="display_colorname" class="mb-0"></P>
+                                            </div>
+                                        </div>
+                                        
+                                    @endif
+                                @endif
+                                
+                                @if(!empty($product->choice_options))
+                                @foreach (json_decode($product->choice_options) as $key => $choice)
+                                    <div class="product_variant size">
+                                        <p class="product-details-tags">{{ $choice->title }}: </p>
+                                        <select class="demo-select2-placeholder form-control" id="{!! $choice->name !!}" name="{!! $choice->name !!}" style="width: 200px;font-size: 14px;height: 36px;">
+                                            @foreach ($choice->options as $key => $option)
+                                            <option @if ($loop->first) selected @endif value="{!! $option !!}">{!! $option !!}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                @endforeach
+                                @endif
+                            </div>
+                        </div>
+                    </form>
+                    </div>
+                </section>
+    
+    <section class="product-details-tab ptb--40 ptb-md--60">
+        <div class="row">
+            <div class="col-12">
+                <ul class="product-details-tab-head nav nav-tab" id="singleProductTab" role="tablist">
+                    <li class="nav-item product-details-tab-item"> <a class="nav-link product-details-tab-link" id="nav-desc-tab" data-toggle="tab" href="#nav-desc" role="tab" aria-controls="nav-desc" aria-selected="true">{!! __('Description') !!} <i></i></a> </li>
+                    <li class="nav-item product-details-tab-item"> <a class="nav-link product-details-tab-link" id="nav-review-tab" data-toggle="tab" href="#nav-review" role="tab" aria-controls="nav-review" aria-selected="true">{!! __('Reviews') !!}(<?= count($product->reviews) ?>) <i></i></a> </li>
+                </ul>
+
+                <div class="product-details-tab-content tab-content">
+                    <div class="tab-pane fade show active" id="nav-desc" role="tabpanel" aria-labelledby="nav-desc-tab">{!! $product->description !!}</div>
+                    <div class="tab-pane fade" id="nav-Spec" role="tabpanel" aria-labelledby="nav-desc-tab">
+                        <div class="row" style="margin: 0;">
+                            <div class="col-sm-2"></div>
+	                            <table class="col-sm-8 table table-bordered">
+	                            <?php $row = 1; ?>
+	                        	@foreach (\App\ProductAttribute::where([['attribute_product_id', '=', '1']])->get() as $key => $attribute)
+	                        		<tr>
+	                        			<td><?= $attribute->$attribute_english_name ?></td>
+	                        			<td><?= $attribute->$attribute_description_english ?></td>
+	                        		</tr>
+	                        	<?php
+	                        	$col = $row;
+	                        	$row++;
+	                        	if($col == 4) {
+	                        	    $row=1;
+	                        	}
+	                        	?>
+	                            @endforeach
+								</table>
+                        	<div class="col-sm-2"></div>
+                        </div>
+                    </div>
+            
+            <div class="tab-pane" role="tabpanel" id="nav-details" aria-labelledby="nav-details-tab">
+              <div class="product-details-additional-info">
+                <h3>{!!__('Additional Information') !!}</h3>
+                <div class="table-content table-responsive">
+                  <table class="shop_attributes">
+                    <tr>
+                      <th>Color: </th>
+                      <td><p>Black, Blue, Gold</p></td>
+                    </tr>
+                    <tr>
+                      <th>Size: </th>
+                      <td><p>XXL, XL, L, M</p></td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+            
+            <div class="tab-pane" role="tabpanel" id="nav-review" aria-labelledby="nav-review-tab">
+                <div class="product-details-review-wrap">
+                    <h2 class="mb--20"><?= count($product->reviews) ?> REVIEWS FOR {!! $product->name !!}</h2>
+                    <div class="review mb--40">
+                    @foreach ($product->reviews as $review)
+                        <div class="review__single">
+                            <div class="review__meta">
+                                <p class="review__author">{{ isset($review->user->name) ? $review->user->name : 'No User' }}</p>
+                                <p class="review__date">{{ date('d-m-Y', strtotime($review->created_at)) }}</p>
+                            </div>
+                            <div class="review__content">
+                                <p class="review__text">{!! $review->comment !!}</p>
+                                <div class="ratings"> 
+                                    @for ($i=0; $i < $review->rating; $i++)
+                                        <i class="fa fa-star rated"></i>
+                                    @endfor
+                                    @for ($i=0; $i < 5-$review->rating; $i++)
+                                        <i class="fa fa-star-o"></i>
+                                    @endfor
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+
+                    </div>
+                    @if(Auth::check())
+                    
+                    @php
+                        $commentable = false;
+                    @endphp
+                    @foreach ($product->orderDetails as $key => $orderDetail)
+                        @if(Auth::user()->id)
+                            @php
+                                $commentable = true;
+                            @endphp
+                        @endif
+                    @endforeach
+                    @if ($commentable)
+                        <h2 class="mb--20">Add a Review</h2>
+                        <form class="form form--review">
+                            @csrf
+                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                            <div class="form__group clearfix mb--20">
+                            <label class="form__label d-block" >Your Ratings</label>
+                                <div class="rating">
+                                    <input type="radio" id="star5" name="rating" value="5" />
+                                    <label class = "full" for="star5" title="Awesome - 5 stars"> </label>
+                                    <input type="radio" id="star4half" name="rating" value="4 and a half" />
+                                    <label class="half" for="star4half" title="Pretty good - 4.5 stars"> </label>
+                                    <input type="radio" id="star4" name="rating" value="4" />
+                                    <label class = "full" for="star4" title="Pretty good - 4 stars"> </label>
+                                    <input type="radio" id="star3half" name="rating" value="3 and a half" />
+                                    <label class="half" for="star3half" title="Meh - 3.5 stars"> </label>
+                                    <input type="radio" id="star3" name="rating" value="3" />
+                                    <label class = "full" for="star3" title="Meh - 3 stars"> </label>
+                                    <input type="radio" id="star2half" name="rating" value="2 and a half" />
+                                    <label class="half" for="star2half" title="Kinda bad - 2.5 stars"> </label>
+                                    <input type="radio" id="star2" name="rating" value="2" />
+                                    <label class = "full" for="star2" title="Kinda bad - 2 stars"> </label>
+                                    <input type="radio" id="star1half" name="rating" value="1 and a half" />
+                                    <label class="half" for="star1half" title="Meh - 1.5 stars"> </label>
+                                    <input type="radio" id="star1" name="rating" value="1" />
+                                    <label class = "full" for="star1" title="Sucks big time - 1 star"> </label>
+                                    <input type="radio" id="starhalf" name="rating" value="half" />
+                                    <label class="half" for="starhalf" title="Sucks big time - 0.5 stars"> </label>
+                                </div>
+                            </div>
+                            
+                            <div class="form__group clearfix mb--20">
+                                <label class="form__label d-block" for="review_name">Name <sup>*</sup></label>
+                                <input id="author" name="name" value="{{ Auth::user()->name }}"  type="text" disabled required class="form__input">
+                            </div>
+                            <div class="form__group clearfix mb--20">
+                                <label class="form__label d-block" for="review_email">Email <sup>*</sup></label>
+                                <input id="email" name="email" value="{{ Auth::user()->email }}"  type="text" required disabled class="form__input">
+                            </div>
+                            <div class="form__group clearfix mb--20">
+                                <label class="form__label d-block" for="review">Your Review <sup>*</sup></label>
+                                <textarea name="comment" id="review_comment" required class="form__input form__input--textarea"></textarea>
+                                <div class="help-block"> <!--<span>Note: </span> HTML is not translated!--> </div>
+                            </div>
+                            <div class="form__group text-right">
+                                <button type="submit" class="btn btn-medium btn-style-1">Continue</button>
+                            </div>
+                        </form>
+                    @endif
+        `       @endif
+                </div>
+            </div>
+            
+            <div class="tab-pane" role="tabpanel" id="nav-return" aria-labelledby="nav-review-tab">
+                <p class="product-details-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam fringilla augue nec est tristique auctor. Donec non est at libero vulputate rutrum. Morbi ornare lectus quis justo gravida semper. Nulla tellus mi, vulputate adipiscing cursus eu, suscipit id nulla. Donec a neque libero.</p>
+              <p class="product-details-description"> Pellentesque aliquet, sem eget laoreet ultrices, ipsum metus feugiat sem, quis fermentum turpis eros eget velit. Donec ac tempus ante. Fusce ultricies massa massa. Fusce aliquam, purus eget sagittis vulputate, sapien libero hendrerit est, sed commodo augue nisi non neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempor, lorem et placerat vestibulum, metus nisi posuere nisl, in accumsan elit odio quis mi. </p>
+            </div>
+            
+            
+          </div>
+        </div>
+      </div>
+    </section>
+ 
+    
+    <!-- Related Product Start -->
+    <section class="related-products-area pt--80 pb--20 pb-md--15 pt-md--60">
+      <div class="row">
+        <div class="col-12 mb--40">
+          <div class="section-title">
+            <h2>{!! __('Similar Products') !!}</h2>
+          </div>
+        </div>
+      </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="product-carousel nav-top js-product-carousel-2">
+                @php 
+                $k = 1; 
+                $same_brand_array = array();
+                @endphp
+                @foreach($sizewiseproducts as $key => $product)
+                    @php
+                    if(!in_array($product->brand_id, $same_brand_array))
+                    {
+                        $same_brand_array[] = $product->brand_id;
+                        if($k == 11){ break; }
+                        $brand = (\App\Brand::whereid($product->brand_id)->first()); @endphp
+                        @include('frontend.single_product')
+                    @php $k = $k+1; 
+                    }
+                    @endphp
+                @endforeach
+                
+                @php if($k < 11) { @endphp
+                    @foreach($modalwiseproducts as $key => $product)
+                        <?php
+                        if(!in_array($product->brand_id, $same_brand_array))
+                        {
+                            if($k == 11){
+                                break;
+                            }
+                            $brand = (\App\Brand::whereid($product->brand_id)->first()); ?>
+                            @include('frontend.single_product')
+                        <?php } ?>
+                    @endforeach
+                @php $k = $k+1; @endphp
+                @php } @endphp
+                </div>
+            </div>
+        </div>
+    </section>
+  </div>
 </div>
 </div>
+<!-- Main Content Wrapper End --> 
 @endsection
 
 @section('script')

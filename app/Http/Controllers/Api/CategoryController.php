@@ -363,6 +363,10 @@ class CategoryController extends Controller
             $tempArray['timer_hours'] =  $hours;
             $tempArray['timer_minutes'] =  $minutes;
             $tempArray['timer_seconds'] =  $seconds;
+            $tempArray['start_date']= date('d-m-Y',$dVal['start_date']);
+            $tempArray['end_date']= date('d-m-Y',$dVal['end_date']);            
+            
+            $tempArray['end_date']=
             $result['deals'][]= $tempArray;
         }
          
@@ -390,7 +394,7 @@ class CategoryController extends Controller
         $result['home_popular_brand']  = FeatureBrand::select('image','brand_id')->where([['is_enable', '=', '0']])->orderBy('id','DESC')->orderBy('orders','DESC')->take(10)->get();
 
         // Section - 10 (New Arrival)
-        $result['newarrival']       = DB::table('products')->join('brands', 'brands.id', '=', 'products.brand_id')->select('products.name','products.ar_name','products.thumbnail_img','products.featured_img','products.slug','products.unit_price','products.tax','products.discount','products.discount_type','products.todays_deal','brands.name as brand_name','brands.ar_name as brand_ar_name',DB::raw("(SELECT AVG(`rating`) FROM reviews WHERE reviews.product_id = products.id GROUP BY reviews.product_id) as avg_rating"))->where('products.newarrival',1)->orderBy('products.sort_order','DESC')->where('products.published',1)->get()->toArray();
+        $result['newarrival']       = DB::table('products')->join('brands', 'brands.id', '=', 'products.brand_id')->select('products.id','products.name','products.ar_name','products.thumbnail_img','products.featured_img','products.slug','products.unit_price','products.tax','products.discount','products.discount_type','products.todays_deal','brands.name as brand_name','brands.ar_name as brand_ar_name',DB::raw("(SELECT AVG(`rating`) FROM reviews WHERE reviews.product_id = products.id GROUP BY reviews.product_id) as avg_rating"))->where('products.newarrival',1)->orderBy('products.sort_order','DESC')->where('products.published',1)->get()->toArray();
         
         $response = [
             "status"  => $status,
@@ -407,7 +411,7 @@ class CategoryController extends Controller
             $productId  = ProductGroup::whereid($value->product_group)->first();
             $productId  = isset($productId['group_products']) ?array_filter(json_decode($productId['group_products'],true)):[];
 
-            $products = DB::table('products')->join('brands', 'brands.id', '=', 'products.brand_id')->select('products.name','products.ar_name','products.thumbnail_img','products.slug','products.unit_price','products.tax','products.discount','products.discount_type','products.todays_deal','brands.name as brand_name','brands.ar_name as brand_ar_name',DB::raw("(SELECT AVG(`rating`) FROM reviews) as avg_rating"))->whereIn('products.id',$productId)->orderBy('products.sort_order','DESC')->where('products.published',1)->get()->toArray();
+            $products = DB::table('products')->join('brands', 'brands.id', '=', 'products.brand_id')->select('products.id','products.name','products.ar_name','products.thumbnail_img','products.slug','products.unit_price','products.tax','products.discount','products.discount_type','products.todays_deal','brands.name as brand_name','brands.ar_name as brand_ar_name',DB::raw("(SELECT AVG(`rating`) FROM reviews) as avg_rating"))->whereIn('products.id',$productId)->orderBy('products.sort_order','DESC')->where('products.published',1)->get()->toArray();
             $tempData['banner_title_english']  = $value['banner_title_english'];
             $tempData['banner_title_arabic']   = $value['banner_title_arabic'];
             $tempData['product_group']          = $value['product_group'];
@@ -426,7 +430,7 @@ public function getProductGroup(Request $request,$id) {
         if($productId){
             $productId  = isset($productId['group_products']) ?array_filter(json_decode($productId['group_products'],true)):[];
 
-            $products = DB::table('products')->join('brands', 'brands.id', '=', 'products.brand_id')->select('products.name','products.ar_name','products.thumbnail_img','products.slug','products.unit_price','products.tax','products.discount','products.discount_type','products.todays_deal','brands.name as brand_name','brands.ar_name as brand_ar_name',DB::raw("(SELECT AVG(`rating`) FROM reviews) as avg_rating"))->whereIn('products.id',$productId)->orderBy('products.sort_order','DESC')->where('products.published',1)->paginate(10);
+            $products = DB::table('products')->join('brands', 'brands.id', '=', 'products.brand_id')->select('products.id','products.name','products.ar_name','products.thumbnail_img','products.slug','products.unit_price','products.tax','products.discount','products.discount_type','products.todays_deal','brands.name as brand_name','brands.ar_name as brand_ar_name',DB::raw("(SELECT AVG(`rating`) FROM reviews) as avg_rating"))->whereIn('products.id',$productId)->orderBy('products.sort_order','DESC')->where('products.published',1)->paginate(10);
             if(count($products) > 0){
                 $response['message'] = "success";
                 $response['status']  = true;
@@ -558,6 +562,101 @@ public function getProductGroup(Request $request,$id) {
 
         return response()->json($response);
     }
+    
+     // Add product to favourite list
+    public function addtoFavourite(Request $request) {
+        $status  = true;
+        $result  = null;
+        $message="";
+        $data=array(
+            "user_id"=>$request->input('user_id'),
+            "product_id"=>$request->input('product_id'),
+            "status"=>"Follow",
+        );
+        if(empty( $data['user_id']) && empty( $data['product_id'])):
+            $response = [
+                "status"  => false,
+                "message" => "Please add product id and user id",
+                //"data"    => $result
+            ];
+
+        else:
+        //FavouriteProduct
+		/// if the product already exist in the fav list or not.
+	//	DB::enableQueryLog();
+		$total=FavouriteProduct::where([
+		'product_id'=>$data['product_id'],
+		'user_id'=>$data['user_id']
+		])->count();
+		
+		if($total==0):
+        $favorite=new FavouriteProduct;
+        $favorite->user_id=$data['user_id'];
+        $favorite->product_id=$data['product_id'];
+        $favorite->status=$data['status'];
+        $favorite->save();
+        $response = [
+            "status"  => true,
+            "message" => "Product successfully added in the favourite list.",
+            //"data"    => $result
+        ];
+		else:
+		$response = [
+                "status"  => false,
+                "message" => "Sorry this product already exist in your favourite list.",
+                //"data"    => $result
+            ];
+		
+		endif;
+        endif;
+        return response()->json($response); 
+    }
+    
+    public function deleteFavourite(Request $request){
+		$message="";
+		$status=false;
+		$result=null;
+		$data=array(
+		"favid"=>$request->input('favid'),
+		"user_id"=>$request->input('user_id')
+		);
+		
+		if(empty($data['favid'])):
+		 $response = [
+                "status"  => false,
+                "message" => "Please including favourite product id",
+                //"data"    => $result
+            ];
+		else:
+		$total=FavouriteProduct::where([
+		'id'=>$data['favid'],
+		'user_id'=>$data['user_id']
+		])->count();
+		
+		//echo($total);
+		//exit;
+		
+		if($total==0){
+			 $response = [
+                "status"  => false,
+                "message" => "Sorry favourite id is wrong.",
+                //"data"    => $result
+            ];
+		}
+		else{
+		FavouriteProduct::where(
+		'id',$data['favid'])->delete();
+		 $response = [
+            "status"  => true,
+            "message" => "Product sucessfully deleted from the favourite list.",
+            //"data"    => $result
+        ];
+		}
+		
+		endif;
+		return response()->json($response); 
+	}
+
 
     public function getproductsfilter(Request $request) {
         $message = [];

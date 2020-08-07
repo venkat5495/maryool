@@ -241,11 +241,11 @@ class CheckoutController extends Controller
             $data['phone']      = $user_address->phone;
 
             $is_error = aramex_address_validation($data['city']);
-            /*if ($is_error->HasErrors) {
+            if ($is_error->HasErrors) {
                 $response['status'] = false;
                 $response['city_error']  = __("We do not deliver in this city!");
                 return response()->json($response);
-            }*/
+            }
             $request->session()->put('shipping_info',  $data);
             return view('frontend.partials.payment_select');
         }else{

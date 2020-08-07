@@ -143,9 +143,31 @@ class CartController extends Controller
             $data['shipping'] = $product->shipping_cost;
         }
 
+        // if($request->session()->has('cart')){
+        //     $cart = $request->session()->get('cart', collect([]));
+        //     $cart->push($data);
+        // }
+        // else{
+        //     $cart = collect([$data]);
+        //     $request->session()->put('cart', $cart);
+        // }
+
         if($request->session()->has('cart')){
-            $cart = $request->session()->get('cart', collect([]));
-            $cart->push($data);
+            $foundInCart = false;
+            $cart = collect();
+
+            foreach ($request->session()->get('cart') as $key => $cartItem){
+                if($cartItem['id'] == $request->id){                   
+                        $foundInCart = true;
+                        $cartItem['quantity'] += $request['quantity'];                    
+                }
+                $cart->push($cartItem);
+            }
+
+            if (!$foundInCart) {
+                $cart->push($data);
+            }
+            $request->session()->put('cart', $cart);
         }
         else{
             $cart = collect([$data]);

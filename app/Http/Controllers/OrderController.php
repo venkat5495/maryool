@@ -203,9 +203,9 @@ class OrderController extends Controller
             $coupon_discount    = session()->get('coupon_discount');
             $coupon_code        = session()->get('coupon_code');
         }
-		//dd(Order::latest('id'));
-        //$last_id                = Order::latest('id')->first();
-        $last_id                = 1000;
+
+        $last_id                = Order::latest('id')->first()->id;
+        $last_id                = 1000 + $last_id;
         $order                  = new Order;
         if(Auth::check()){
             $order->user_id     = Auth::user()->id;

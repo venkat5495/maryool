@@ -73,8 +73,7 @@ class AppServiceProvider extends ServiceProvider
           return \App\FeatureBrand::orderBy('orders')->get();
       });
 
-      //View::composer('frontend/layouts/blank',LanguageComposer::class);
-	  View::composer(['frontend/layouts/blank', 'frontend/layouts/app'],LanguageComposer::class);
+      View::composer('frontend/layouts/app',LanguageComposer::class);
 
   }
 

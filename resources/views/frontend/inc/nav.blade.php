@@ -155,7 +155,7 @@
  <div class="overlapblackbg"></div>
          <ul class="wsmenu-list">
             <li><a href="{!! route('home') !!}" class="logo-box mb-md--30"> <img src="{{ $logo }}" alt="logo"> </a></li>
-            <li aria-haspopup="true"> <a href="#" class="navtext"><i class="fa fa-list-ul" aria-hidden="true"></i> Category</a>
+            <li aria-haspopup="true"> <a href="#" class="navtext"><i class="fa fa-list-ul" aria-hidden="true"></i> {!! __('Category') !!}</a>
             <div class="wsshoptabing wtsdepartmentmenu clearfix">
               <div class="wsshopwp clearfix" style="width:auto;">
                 <ul class="wstabitem clearfix">

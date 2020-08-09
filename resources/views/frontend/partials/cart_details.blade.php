@@ -1,55 +1,59 @@
-<div class="cart-area pt--40 pb--80 pt-md--30 pb-md--60">
-    <div class="container">
-        <div class="cart-wrapper mb--80 mb-md--60">
+<!-- START MAIN CONTENT -->
+{{--<div class="main_content">
+    <!-- START SECTION CART -->  
+    <div class="section">
+        <div class="container">
             <div class="row">
                 <div class="col-12">
                     <form action="#" class="form cart-form">
-                    @if(Session::has('cart'))
-                        <div class="cart-table table-content table-responsive">
-                            <table class="table mb--30 table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>{{__('Delete')}}</th>
-                                        <th>{{__('Images')}}</th>
-                                        <th>{{__('Product')}}</th>
-                                        <th>{{__('Unit Price')}}</th>
-                                        <th>{{__('Quantity')}}</th>
-                                        <th>{{__('Total')}}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php
-                                    $total = 0;
-                                    @endphp
-                                    @foreach (Session::get('cart') as $key => $cartItem)
-                                        @php
-                                        $product = \App\Product::find($cartItem['id']);
-                                        $total = $total + $cartItem['price']*$cartItem['quantity'];
-                                        $product_name_with_choice = $product->name;
-                                        if(isset($cartItem['color'])){
-                                            $product_name_with_choice .= ' - '.\App\Color::where('code', $cartItem['color'])->first()->name;
-                                        }
-                                        foreach (json_decode($product->choice_options) as $choice){
-                                            $str = $choice->name; // example $str =  choice_0
-                                            $product_name_with_choice .= ' - '.$cartItem[$str];
-                                        }
-                                        @endphp
+                        @if(Session::has('cart'))
+                            <div class="table-responsive shop_cart_table">
+                                <table class="table">
+                                    <thead>
                                         <tr>
-                                            <td><a class="delete" href="javascript:void(0)" onclick="removeFromCartView(event, {{ $key }})"><i class="fa fa-times"></i></a></td>
-                                            <td><a href="javascript:void(0)"><img src="{{ asset($product->thumbnail_img) }}" alt=""></a></td>
-                                            <td class="wide-column"><h3><a href="#">{{ $product_name_with_choice }}</a></h3></td>
-                                            <td class="cart-product-price"><strong>{{ single_price($cartItem['price']) }}</strong></td>
-                                            <td style="width:190px">
-                                                <div class="quantity-container">
-                                                    <div class="button-container">
-                                                        <a href="javascript:void(0);" class="cart-qty-minus"  value="-" style="width: 30px;height: 30px;color: #000!important;text-align: center;cursor: pointer;font-size: 8px;font-weight: 700;display: inline-block;background-color: #fff;padding-top: 3px;border: 1px solid #ddd;line-height: 28px;"><i class="fa fa-minus"></i></a>
-                                                        <input readonly min="{{ generalsettingdata('min_qty') }}" max="{{ generalsettingdata('max_qty') }}" data-min="{{ generalsettingdata('min_qty') }}" data-max="{{ generalsettingdata('max_qty') }}" type="text" name="qty" data-key="{{ $key }}" value="{{ $cartItem['quantity'] }}" onchange="updateQuantity({{ $key }}, this)" class="input-text qty increse-decre-input"  style="width: 75px; height: 31px; text-align: center; margin: 0 3px; border: solid 1px lightgray;"/>
-                                                        <a href="javascript:void(0);" class="cart-qty-plus" value="+" style="width: 30px;height: 30px;color: #000!important;text-align: center;cursor: pointer;font-size: 8px;font-weight: 700;display: inline-block;background-color: #fff;padding-top: 3px;border: 1px solid #ddd;line-height: 28px;"><i class="fa fa-plus"></i></a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="cart-product-price">{{ single_price($cartItem['price']*$cartItem['quantity']) }}</td>
+                                            <th class="product-thumbnail">{{__('Images')}}</th>
+                                            <th class="product-name">{{__('Product')}}</th>
+                                            <th class="product-price">{{__('Unit Price')}}</th>
+                                            <th class="product-quantity">{{__('Quantity')}}</th>
+                                            <th class="product-subtotal">{{__('Total')}}</th>
+                                            <th class="product-remove">{{__('Delete')}}</th>
                                         </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php
+                                            $total = 0;
+                                        @endphp
+                                        @foreach (Session::get('cart') as $key => $cartItem)
+                                            @php
+                                                $product = \App\Product::find($cartItem['id']);
+                                                $total = $total + $cartItem['price']*$cartItem['quantity'];
+                                                $product_name_with_choice = $product->name;
+                                                if(isset($cartItem['color'])){
+                                                    $product_name_with_choice .= ' - '.\App\Color::where('code', $cartItem['color'])->first()->name;
+                                                }
+                                                foreach (json_decode($product->choice_options) as $choice){
+                                                    $str = $choice->name; // example $str =  choice_0
+                                                    $product_name_with_choice .= ' - '.$cartItem[$str];
+                                                }
+                                            @endphp
+                                            <tr>
+                                                <td class="product-thumbnail"><a href="javascript:void(0);"><img src="{{ asset($product->thumbnail_img) }}" alt="product"></a></td>
+                                                <td class="product-name" data-title="Product"><a href="javascript:void(0);">{{ $product_name_with_choice }}</a></td>
+                                                <td class="product-price" data-title="Price">{{ single_price($cartItem['price']) }}</td>
+                                                <td class="product-quantity" data-title="Quantity">
+                                                    <div class="quantity">
+                                                        <div class="quantity-container">
+                                                            <div class="button-container">
+                                                                <input type="button" value="-" class="minus cart-qty-minus">
+                                                                <input readonly min="{{ generalsettingdata('min_qty') }}" max="{{ generalsettingdata('max_qty') }}" data-min="{{ generalsettingdata('min_qty') }}" type="text" name="qty" data-key="{{ $key }}" value="{{ $cartItem['quantity'] }}" title="Qty" class="qty" onchange="updateQuantity({{ $key }}, this);" />
+                                                                <input type="button" value="+" class="plus cart-qty-plus">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="cart-product-price">{{ single_price($cartItem['price']*$cartItem['quantity']) }}</td>
+                                                <td><a class="delete" href="javascript:void(0)" onclick="removeFromCartView(event, {{ $key }})"><i class="fa fa-times"></i></a></td>
+                                            </tr>
                                         @endforeach
                                     </tbody>
                                     @if(count(Session::get('cart')) <= 0)
@@ -82,9 +86,103 @@
                                 </div>
                             </div>
                             @endif
-                        </div>
+                        @endif
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>--}}
+<!-- END MAIN CONTENT -->
+
+<!-- START MAIN CONTENT -->
+<div class="main_content">
+    <!-- START SECTION CART -->  
+    <form action="#" class="form cart-form">
+        <div class="section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        @if(Session::has('cart'))
+                            <div class="table-responsive shop_cart_table">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th class="product-thumbnail">{{__('Images')}}</th>
+                                            <th class="product-name">{{__('Product')}}</th>
+                                            <th class="product-price">{{__('Unit Price')}}</th>
+                                            <th class="product-quantity">{{__('Quantity')}}</th>
+                                            <th class="product-subtotal">{{__('Total')}}</th>
+                                            <th class="product-remove">{{__('Delete')}}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php
+                                            $total = 0;
+                                        @endphp
+                                        @foreach (Session::get('cart') as $key => $cartItem)
+                                            @php
+                                                $product = \App\Product::find($cartItem['id']);
+                                                $total = $total + $cartItem['price']*$cartItem['quantity'];
+                                                $product_name_with_choice = $product->name;
+                                                if(isset($cartItem['color'])){
+                                                    $product_name_with_choice .= ' - '.\App\Color::where('code', $cartItem['color'])->first()->name;
+                                                }
+                                                foreach (json_decode($product->choice_options) as $choice){
+                                                    $str = $choice->name; // example $str =  choice_0
+                                                    $product_name_with_choice .= ' - '.$cartItem[$str];
+                                                }
+                                            @endphp
+                                            <tr>
+                                                <td class="product-thumbnail"><a href="javascript:void(0);"><img src="{{ asset($product->thumbnail_img) }}" alt="product"></a></td>
+                                                <td class="product-name" data-title="Product"><a href="javascript:void(0);">{{ $product_name_with_choice }}</a></td>
+                                                <td class="product-price" data-title="Price">{{ single_price($cartItem['price']) }}</td>
+                                                <td class="product-quantity" data-title="Quantity">
+                                                    <div class="quantity">
+                                                        <div class="quantity-container">
+                                                            <div class="button-container">
+                                                                <input type="button" value="-" class="minus cart-qty-minus">
+                                                                <input readonly min="{{ generalsettingdata('min_qty') }}" max="{{ generalsettingdata('max_qty') }}" data-min="{{ generalsettingdata('min_qty') }}" type="text" name="qty" data-key="{{ $key }}" value="{{ $cartItem['quantity'] }}" title="Qty" class="qty" onchange="updateQuantity({{ $key }}, this);" />
+                                                                <input type="button" value="+" class="plus cart-qty-plus">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="product-subtotal" data-title="Total"> {{ single_price($cartItem['price']*$cartItem['quantity']) }}</td>
+                                                <td class="delete" href="javascript:void(0)" onclick="removeFromCartView(event, {{ $key }})"><a href="#"><i class="ti-close"></i></a></td>
+                                            </tr>
+                                            
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @endif
                     </div>
                 </div>
-                @endif
-            </form>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="medium_divider"></div>
+                        <div class="divider center_icon"><i class="ti-shopping-cart-full"></i></div>
+                        <div class="medium_divider"></div>
+                    </div>
+                </div>
+            
+                <div class="row">
+                    <div class="col-lg-4 col-md-6 mb-3 mb-md-0">
+                        <div class="coupon field_form input-group">
+                            <input type="text" name="coupon_code" id="coupon_code" value="" class="form-control form-control-sm" placeholder="{{__('Enter coupon code')}}">
+                            <div class="input-group-append">
+                                <button class="btn btn-fill-out btn-sm" type="submit" id="apply_cart_coupon">{{__('Apply Coupon')}}</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                    </div>
+                    @include('frontend.partials.cart_summary')
+                </div> 
+            </div>
         </div>
+    <!-- END SECTION CART --> 
+    </form>
+</div>  
+<!-- END MAIN CONTENT -->

@@ -13,16 +13,29 @@
     .input-group-text, .input-group, .form-control { font-size: 14px; height: 36px;}
     .close { position: absolute; right: 7px; top: 7px; }
 </style>
-<!-- Breadcumb area Start -->
-<div class="breadcrumb-area">
+
+<!-- START SECTION BREADCRUMB -->
+<div class="breadcrumb_section bg_gray page-title-mini">
+    <!-- STRART CONTAINER -->
     <div class="container">
-        <div class="row">
-            <div class="col-12 text-center">
-                <h1 class="page-title">{!!__('Cart')!!}</h1>
+        <div class="row align-items-center">
+        	<div class="col-md-6">
+                <div class="page-title">
+            		<h1>{!!__('Cart')!!}</h1>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <ol class="breadcrumb justify-content-md-end">
+                    <li class="breadcrumb-item"><a href="{{ route('home') }}">{{__('Home')}}</a></li>
+                    <li class="breadcrumb-item active">{!!__('Cart')!!}</li>
+                </ol>
             </div>
         </div>
     </div>
+    <!-- END CONTAINER-->
 </div>
+<!-- END SECTION BREADCRUMB -->
+
 <div class="modal fade" id="GuestCheckout" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="z-index:9999999">
         <div class="modal-dialog modal-md modal-dialog-zoom text-center" role="document">
             <div class="modal-content px-5 py-5">

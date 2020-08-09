@@ -29,44 +29,44 @@
     }
 </style>
 
-<div class="breadcrumb-area">
+<!-- START SECTION BREADCRUMB -->
+<div class="breadcrumb_section bg_gray page-title-mini">
+    <!-- STRART CONTAINER -->
     <div class="container">
-        <div class="row">
-            <div class="col-12 text-center">
-                <h1 class="page-title"><?= $page_title ?></h1>
-                <ul class="breadcrumb justify-content-center">
-                    <li><a href="{{ route('home') }}">{{__('Home')}}</a></li>
-                    <li><a href="{{ route('products') }}">{{__('Shop')}}</a></li>
-                </ul>
+        <div class="row align-items-center">
+        	<div class="col-md-6">
+                <div class="page-title">
+            		<h1>{{$page_title}}</h1>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <ol class="breadcrumb justify-content-md-end">
+                    <li class="breadcrumb-item"><a href="{{ route('home') }}">{{__('Home')}}</a></li>
+                    <li class="breadcrumb-item active">{{$page_title}}</li>
+                </ol>
             </div>
         </div>
     </div>
+    <!-- END CONTAINER-->
 </div>
+<!-- END SECTION BREADCRUMB -->
 
-
-<!-- Main Content Wrapper Start -->
-<div class="main-content-wrapper">
-    <div class="shop-area pt--40 pb--80 pt-md--30 pb-md--60">
+<!-- START MAIN CONTENT -->
+<div class="main_content">
+    <!-- START SECTION SHOP -->
+    <div class="section">
         <div class="container">
             <div class="row">
-                <div class="col-lg-12">
-                    <div class="row">
+                <div class="col-12">
+                    <div class="row align-items-center mb-4 pb-1">
                         <div class="col-12">
-                            <!-- Shop Toolbar Start -->
-                            <div class="shop-toolbar">
-                                <div class="product-view-mode" data-default="list">
-                                    <a class="grid-2" data-target="gridview-2" data-toggle="tooltip" data-placement="top" title="2"></a>
-                                    <a class="grid-3" data-target="gridview-3" data-toggle="tooltip" data-placement="top" title="3"></a>
-                                    <a class="grid-4 active" data-target="gridview-4" data-toggle="tooltip" data-placement="top" title="4"></a>
-                                    <a class="grid-5" data-target="gridview-5" data-toggle="tooltip" data-placement="top" title="5"></a>
-                                </div>
-                                <!--<span class="product-pages"><p>Showing  {{($products->currentpage()-1)*$products->perpage()+1}} - {{$products->currentpage()*$products->perpage()}} of  {{$products->total()}} results</p></span>-->
-                                <form id="search-form" method="get">
+                            <div class="product_header">
+                                <div class="product_header_left">
+                                    <form id="search-form" method="get">
                                         <input type="hidden" name="q" value="{{ isset($query) ? $query : '' }}">
-                                        <div class="product-short">
-                                            <label class="select-label">Sort By:</label>
-                                            <select name="orderby" onchange="filter()" id="sort" class="form-control" style="font-size: 14px;height: 40px;width: 150px;">
-                                                <option disabled="">{{__('Sort By')}}</option>
+                                        <div class="custom_select">
+                                            <select name ="orderby" onchange="filter()" id="sort" class="form-control form-control-sm">
+                                                <option  disabled="">{{__('Sort By')}}</option>
                                                 <option value="1" {{isset ($_GET['orderby']) && $_GET['orderby'] == 1 ? 'selected' : '' }}>Newness</option>
                                                 <option value="2" {{isset ($_GET['orderby']) && $_GET['orderby'] == 2 ? 'selected' : '' }}>Oldest</option>
                                                 <option value="3" {{isset ($_GET['orderby']) && $_GET['orderby'] == 3 ? 'selected' : '' }}>Price: low to high</option>
@@ -74,30 +74,56 @@
                                             </select>
                                         </div>
                                     </form>
+                                </div>
+                                <div class="product_header_right">
+                                    <div class="products_view">
+                                        <a href="javascript:Void(0);" class="shorting_icon grid"><i class="ti-view-grid"></i></a>
+                                        <a href="javascript:Void(0);" class="shorting_icon list active"><i class="ti-layout-list-thumb"></i></a>
+                                    </div>
+                                    <!-- <div class="custom_select">
+                                        <select class="form-control form-control-sm">
+                                            <option value="">Showing</option>
+                                            <option value="9">9</option>
+                                            <option value="12">12</option>
+                                            <option value="18">18</option>
+                                        </select>
+                                    </div> -->
+                                </div>
                             </div>
-                            <!-- Shop Toolbar End -->
                         </div>
-                    </div>
-    
-                    <div class="col-xl-12">
+                    </div> 
+                    <div class="row shop_container list">
                         @if(count($products) > 0)
-                        <div id="js_produc_list_div">
-                            <div class="shop-product-wrap gridview-4 row no-gutters">
-                               @include('frontend.partials.product_list')
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="product-loader" style="display: none;"><i class="fa fa-spin fa-spinner"></i></div>
-                        </div>
+                            @include('frontend.partials.product_list')
                         @else
                             <div class="products-box-bar p-3 bg-white"><p>{{__('No items found.')}}</p></div>
                         @endif
                     </div>
+                    @if(count($products) > 0)
+                        <div class="row">
+                            <div class="col-12">
+                                <ul class="pagination mt-3 justify-content-center pagination_style1">
+                                    @if($products->currentPage() > 1)
+                                        <li class="page-item"><a class="page-link" href="?category_id={{$_GET['category_id']}}&page={{$products->currentPage()-1}}"><i class="linearicons-arrow-left"></i></a></li>
+                                    @endif
+                                        @for($pageInt=1; $pageInt <= $products->lastPage(); $pageInt++)
+                                            <li class="page-item {{$pageInt == $products->currentPage() ? 'active':''}}"><a class="page-link" href="?category_id={{$_GET['category_id']}}&page={{$pageInt}}">{{$pageInt}}</a></li>
+                                        @endfor
+                                    @if($products->currentPage() < $products->lastPage())
+                                        <li class="page-item"><a class="page-link" href="?category_id={{$_GET['category_id']}}&page={{ $products->currentPage()+1 }}"><i class="linearicons-arrow-right"></i></a></li>
+                                    @endif
+                                </ul>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
+    <!-- END SECTION SHOP -->
 </div>
+<!-- END MAIN CONTENT -->
+
 
 <script type="text/javascript">
     function filter() {

@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Support\Facades\App;
 
 class localization
 {
@@ -16,10 +17,9 @@ class localization
     public function handle($request, Closure $next)
     {
         // Check header request and determine localizaton
-        $local = ($request->hasHeader('accept-lang')) ? $request->header('accept-lang') : 'en';
-        // set laravel localization
-        app()->setLocale($local);
-        session()->put('locale', $local);
+        if (session()->has('locale')){
+            App::setLocale(session('locale'));
+        }
         // continue request
         return $next($request);
     }

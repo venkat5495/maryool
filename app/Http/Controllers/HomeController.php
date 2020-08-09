@@ -925,7 +925,7 @@ class HomeController extends Controller
         elseif($product->tax_type == 'amount'){
             $price += $product->tax;
         }
-//        return single_price($price*$request->quantity);
+        //        return single_price($price*$request->quantity);
         $response['price'] = single_price($price*$request->quantity);
         $response['color_image'] = $color_image;
         $response['stock'] = $stock;

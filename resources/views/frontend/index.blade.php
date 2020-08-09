@@ -1,481 +1,395 @@
 @extends('frontend.layouts.app')
 @section('content')
-<?php
-if(\App\Language::where('code', Session::get('locale', Config::get('app.locale')))->first()->rtl == 1)
-{
-    $current_language="arabic";
-} else {
-    $current_language="english";
-}
+    @php
+        if(\App\Language::where('code', Session::get('locale', Config::get('app.locale')))->first()->rtl == 1)
+        {
+            $current_language="arabic";
+        } else {
+            $current_language="english";
+        }
 
-if($current_language=='arabic') {
-    $banner_title       = "banner_title_arabic";
-    $css_banner         = "-webkit-transform: scaleX(-1); transform: scaleX(-1);";
-} else {
-    $banner_title       = "banner_title_english";
-    $css_banner         = "";
-}
-?>
-<div class="slider-area">
-    <div class="homepage-slider"> 
-        @foreach (\App\Dynamicbanner::where([['banner_section', '=', '1'],['status','=','Active']])->get() as $key => $banner)
-        <a href="{{ route('productsgroup', $banner->product_group) }}"><div class="single-slider content-v-center" style="background-image: url({{ asset($banner->banner_path) }}); {{ $css_banner }}">
-        </div></a>
-        @endforeach
-    </div>
-</div>
-
-
-<div class="promo-box-area ptb--30 ptb-md--30">
-
-  <div class="container">
-
-    <div class="row">
-
-        @foreach (\App\Dynamicbanner::where([['banner_section', '=', '2'],['status','=','Active']])->get() as $key => $section_a)
-
-        <div class="col-md-6 mb-sm--30">
-
-            <a href="{{ route('productsgroup', $section_a->product_group) }}"><img src="{{ asset($section_a->banner_path) }}" class="img-fluid" alt="{{ $banner->$banner_title }}"></a>
-
+        if($current_language=='arabic') {
+            $banner_title       = "banner_title_arabic";
+            $css_banner         = "-webkit-transform: scaleX(-1); transform: scaleX(-1);";
+        } else {
+            $banner_title       = "banner_title_english";
+            $css_banner         = "";
+        }
+    @endphp
+    <!-- START SECTION BANNER -->
+    <div class="banner_section full_screen staggered-animation-wrap">
+        <div id="carouselExampleControls" class="carousel slide carousel-fade light_arrow carousel_style2" data-ride="carousel">
+            <div class="carousel-inner">
+                @foreach (\App\Dynamicbanner::where([['banner_section', '=', '1'],['status','=','Active']])->get() as $key => $banner)
+                    <div class="carousel-item background_bg overlay_bg_50 {{$key == 1?'active':''}}" data-img-src="{{ asset($banner->banner_path) }}">
+                        <div class="banner_slide_content banner_content_inner">
+                            <div class="container">
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-7 col-md-10">
+                                        <div class="banner_content text_white text-center">
+                                            <a class="btn btn-white staggered-animation" href="{{ route('productsgroup', $banner->product_group) }}" data-animation="fadeInUp" data-animation-delay="0.5s">Shop Now</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev"><i class="ion-chevron-left"></i></a>
+            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next"><i class="ion-chevron-right"></i></a>
         </div>
-
-        @endforeach
-
     </div>
+    <!-- END SECTION BANNER -->
 
-  </div>
+    <!-- END MAIN CONTENT -->
+    <div class="main_content">
+        
+        <!-- START SECTION CATEGORIES -->
+        <div class="section pt-0 small_pb">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="cat_overlap radius_all_5">
+                            <div class="row align-items-center">
+                                <div class="col-lg-3 col-md-4">
+                                    <div class="text-center text-md-left">
+                                        <h4>{!! __('Top Categories') !!}</h4>
+                                        <p class="mb-2">There are many variations of passages of Lorem</p>
+                                        <a href="#" class="btn btn-line-fill btn-sm">View All</a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-9 col-md-8">
+                                    <div class="cat_slider mt-4 mt-md-0 carousel_slider owl-carousel owl-theme nav_style5" data-loop="true" data-dots="false" data-nav="true" data-margin="30" data-responsive='{"0":{"items": "1"}, "380":{"items": "2"}, "991":{"items": "3"}, "1199":{"items": "4"}}'>
+                                       
+                                        @foreach (\App\Category::get() as $category)
+                                            <div class="item">
+                                                <div class="categories_box">
+                                                    <a href="{{ route('products.category', $category->id) }}">
+                                                        <img src="{{ asset($category->icon) }}"> 
+                                                        <span>{!! __($category->name) !!}</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        @endforeach
 
-</div>
-
-  
-
-<section class="mostviewed-product-area pt--20 pb--60 pt-md--60 pb-md--50">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-
-                <div class="section-title mb--35">
-                    <a href="{{ route('our_collection', 'see') }}"><h2>{!! __('Our Collection >>') !!}</h2></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="row no-gutters">
-            
-            <div class="col-12">
-                <div class="product-carousel nav-top js-collction-carousel-2">
+        <!-- END SECTION CATEGORIES -->
 
-                    @foreach (\App\Dynamicbanner::where([['banner_section', '=', '3']])->limit(6)->get() as $key => $single)
-
-                    <a href="{{ route('productsgroup', $single->product_group) }}">
-
-                        <div class="mirora-product collction-product">
-
-                            <div class="product-img"> 
-
-                                <img src="{{ asset($single->banner_path) }}" alt="Product" class="primary-image" /> 
-
-                                <img src="{{ asset($single->mouse_over_banner) }}" alt="Product" class="secondary-image" />
-
-                            </div>
-
-                            <div class="product-content text-center">
-
-                                <h4 style="color:#fff">{{ $single->$banner_title }}</h4>
-
-                            </div>
-
+        <!-- START SECTION A -->
+        <div class="promo-box-area ptb--30 ptb-md--30">
+            <div class="container">
+                <div class="row">
+                    @foreach (\App\Dynamicbanner::where([['banner_section', '=', '2'],['status','=','Active']])->limit(2)->get() as $key => $section_a)
+                        <div class="col-md-6 mb-sm--30">
+                            <a href="{{ route('productsgroup', $section_a->product_group) }}"><img src="{{ asset($section_a->banner_path) }}" class="img-fluid"></a>
                         </div>
-
-                    </a>
-
-                    @endforeach</div>
+                    @endforeach
+                </div>
             </div>
-
-
-
         </div>
-    </div>
-</section>
-
-
-
-<?php
-foreach (\App\Dynamicbanner::where([['banner_section', '=', '10'],['status','=','Active']])->get() as $key => $new_arrival)
-{ ?>
-<!-- Mostiviewed Products area Start -->
-<section class="mostviewed-product-area pt--20 pb--60 pt-md--60 pb-md--50">
-  <div class="container">
-    <div class="row">
-      <div class="col-12">
-        <div class="section-title mb--35">
-          <a href="{{ route('productsgroup', $new_arrival->product_group) }}"><h2><?= $new_arrival->$banner_title." >>" ?></h2></a>
+        <!-- END SECTION A -->
+       
+        <!-- START Collection  Section-->
+        <div class="section pb_20">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="heading_s4 text-center">
+                            <a href="{{ route('our_collection', 'see') }}">
+                                <h2>{!! __('Our Collection') !!}</h2>
+                            </a>
+                        </div>
+                        <p class="text-center leads"></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="product_slider carousel_slider owl-carousel owl-theme nav_style5" data-loop="true" data-dots="false" data-nav="true" data-margin="30" data-responsive='{"0":{"items": "1"}, "481":{"items": "2"}, "768":{"items": "3"}, "1199":{"items": "4"}}'>
+                            @foreach (\App\Dynamicbanner::where([['banner_section', '=', '3']])->limit(6)->get() as $key => $single)
+                                <div class="item">
+                                    <div class="product_box text-center">
+                                        <a href="{{ route('productsgroup', $single->product_group) }}">
+                                            <div class="product_img">
+                                                <img src="{{ asset($single->banner_path) }}" alt="product">
+                                            </div>
+                                        </a>
+                                        <div class="product_info">
+                                            <h6 class="product_title"><a href="{{ route('productsgroup', $single->product_group) }}">{{ $single->$banner_title }}</a></h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div> 
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="row no-gutters">
-      <div class="col-12">
-        <div class="product-carousel nav-top js-product-carousel-2">
-            <?php
-                $product_group_id = $new_arrival->product_group;
-                $group_products = (\App\ProductGroup::whereid($product_group_id)->first());
-                $group_product  = json_decode($group_products->group_products);
-                foreach($group_product as $single_id)
+        <!-- END  Collection  Section --> 
+
+        <!-- START NEW Arraival-->
+        @foreach (\App\Dynamicbanner::where([['banner_section', '=', '10'],['status','=','Active']])->get() as $key => $new_arrival)
+            <div class="section pb_20">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            <div class="heading_s4 text-center">
+                                <a href="{{ route('productsgroup', $new_arrival->product_group) }}">
+                                    <h2>{{$new_arrival->$banner_title}}</h2>
+                                </a>
+                            </div>
+                            <p class="text-center leads"></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="product_slider carousel_slider owl-carousel owl-theme nav_style5" data-loop="true" data-dots="false" data-nav="true" data-margin="30" data-responsive='{"0":{"items": "1"}, "481":{"items": "2"}, "768":{"items": "3"}, "1199":{"items": "4"}}'>
+                                @php
+                                    $product_group_id = $new_arrival->product_group;
+                                    $group_products = (\App\ProductGroup::whereid($product_group_id)->first());
+                                    $group_product  = json_decode($group_products->group_products);
+                                @endphp
+                                @foreach($group_product as $groupKey => $single_id)
+                                    @if($groupKey < 10)
+                                        @php
+                                            $product = (\App\Product::whereid($single_id)->first());
+                                        @endphp
+                                        @if(!empty($product))
+                                            @php
+                                                $brand = (\App\Brand::whereid($product->brand_id)->first());
+                                            @endphp
+                                            @include('frontend.single_product')
+                                        @endif
+                                    @endif
+                                @endforeach
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+        @endforeach
+        <!-- END  NEW Arraival -->
+
+        <!-- Start Flash Deal Section --> 
+        @php 
+            $FlashDeal = \App\FlashDeal::where([['status', '=', '1']])->get();  
+        @endphp
+        @if(!empty($FlashDeal))
+            <div class="heading_s4 text-center">
+                <h2>{!! __('Deals') !!}</h2>
+            </div>
+            @foreach ($FlashDeal as $key => $deals)
+            @php
+                $end_date     =  $deals->end_date;
+                $current_date = date('Y-m-d-H-i');
+                if($end_date < strtotime($current_date))
                 {
-                    $product = (\App\Product::whereid($single_id)->first());
-                    if(!empty($product))
-                    { 
-                        $brand = (\App\Brand::whereid($product->brand_id)->first()); ?>
-                        @include('frontend.single_product')
-                    <?php 
-                    } 
+                    continue;
                 }
-             ?>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<?php } ?>
-
-
-  
-
-@php 
-$FlashDeal = \App\FlashDeal::where([['status', '=', '1']])->get();
-if(!empty($FlashDeal))
-{
-@endphp
-<section class="mostviewed-product-area pt--20 pb--60 pt-md--60 pb-md--50">
-
-    <div class="container">
-
-        <div class="row">
-
-            <div class="col-12">
-
-                <div class="section-title mb--35">
-
-                    <h2>{!! __('Deals') !!}</h2>
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="row no-gutters">
-
-            <div class="col-12">
-
-                <div class="product-carousel nav-top js-deal-carousel-1">
-
-                    <?php $d = 1; ?>
-
-                    @foreach ($FlashDeal as $key => $deals)
-                    <?php
-                    $end_date     =  $deals->end_date;
-                    $current_date = date('Y-m-d-H-i');
-                    if($end_date < strtotime($current_date))
-                    {
-                        continue;
-                    }
-                    ?>
-                    <a href="{{ route('productsgroup', $deals->product_group) }}">
-
-                        <div class="dealwrap clearfix" style="padding: 0px 0px  0px 10px;">
-
-                            <div class="row">
-
-                                <div class="col-sm-6">
-
-
-                                    <div class="watch-title mb--30">{{ $deals->title }}</div>
-
-                                    <div class="watchtxt mb--40">{{ $deals->description }}</div>
-
-                                    <div id="simple-timer<?= $d; ?>"></div>                                    
-
+            @endphp
+                <div class="section background_bg" data-img-src="{{ asset($deals->banner_path) }}">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-8 col-sm-9">
+                                <div class="furniture_banner">
+                                    <h3 class="single_bn_title">{{ $deals->title }}</h3>
+                                    <h4 class="single_bn_title1 text_default">{{ $deals->description }}</h4>
+                                    <div class="countdown_time countdown_style3 mb-4" data-time="{{date('Y/m/d H:i:s', $end_date)}}"></div>
+                                    <a href="{{ route('productsgroup', $deals->product_group) }}" class="btn btn-fill-out">Shop Now</a>
                                 </div>
-
-                                <div class="col-sm-6 mobile-hide" style="padding:0">
-
-                                    <center><img src="{{ asset($deals->banner_path) }}" alt="Deal" style="height: 350px;"></center>
-
-                                </div>
-
                             </div>
-
                         </div>
-
-                    </a>
-
-                    <?php $d++; ?>
-
-                    @endforeach
-
-                    
-
+                    </div>
                 </div>
+            @endforeach
+        @endif
+        <!-- End  Flash Deal Section --> 
 
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-@php } @endphp
-
-<!-- Banner area Start -->
-@php 
-$Dynamicbanner8 = \App\Dynamicbanner::where([['banner_section', '=', '8'],['status','=','Active']])->get();
-if(!empty($Dynamicbanner8))
-{
-@endphp
-
-<section class="banner-area mb--30">
-
-    @foreach ($Dynamicbanner8 as $key => $sectionb)
-
-        <a href="{{ route('productsgroup', $sectionb->product_group) }}"><img src="{{ asset($sectionb->banner_path) }}"  class="img-fluid <?= ($sectionb->device_type == 'Mobile')?'mobile-show':'mobile-hide' ?>" alt="{{ $sectionb->$banner_title }}"></a>
-
-    @endforeach
-
-</section>
-@php } @endphp
-<!-- Featured Products area Start -->
-
-
-
-<?php
-
-$new = 1;
-
-$feature_product_group;
-
-foreach (\App\Dynamicbanner::where([['banner_section', '=', '6'],['status','=','Active']])->get() as $key => $feature_product_group)
-{
-$product_group_id = $feature_product_group->product_group;
-?>
-
-<section class="mostviewed-product-area pt--20 pb--60 pt-md--60 pb-md--50">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-
-                <div class="section-title mb--35">
-                    <a href="{{ route('productsgroup', $product_group_id) }}"><h2><?= $feature_product_group->$banner_title." >>" ?></h2></a>
+        <!-- Start Banner area  -->
+        @php 
+            $Dynamicbanner8 = \App\Dynamicbanner::where([['banner_section', '=', '8'],['status','=','Active']])->get();
+        @endphp
+        @if(!empty($Dynamicbanner8))
+            @foreach ($Dynamicbanner8 as $key => $sectionb)
+                <div class="section background_bg mt-3" data-img-src="{{ asset($sectionb->banner_path) }}">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-8 col-sm-9">
+                                <div class="furniture_banner">
+                                    <h3 class="single_bn_title">{{ $sectionb->banner_title }}</h3>
+                                    <h4 class="single_bn_title1 text_default">{{ $sectionb->description }}</h4>
+                                    <div class="mb-4"></div>
+                                    <a href="{{ route('productsgroup', $sectionb->product_group) }}" class="btn btn-fill-out">Shop Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="row no-gutters">
-            <div class="col-12">
-                <div class="product-carousel nav-top js-product-carousel-2">
-                <?php
-                    $group_products = (\App\ProductGroup::whereid($product_group_id)->first());
-                    $group_product  = json_decode($group_products->group_products);
-                    foreach($group_product as $single_id)
-                    {
-                        $product = (\App\Product::whereid($single_id)->first());
-                        if(!empty($product))
-                        { 
-                            $brand = (\App\Brand::whereid($product->brand_id)->first());
-                        ?>
-                        @include('frontend.single_product')
-                    <?php } 
-                    }  ?>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-</section>
-
-<?php } ?>
-
-
-
-<!-- Banner area Start -->
-@php 
-$Dynamicbanner = \App\Dynamicbanner::where([['banner_section', '=', '9'],['status','=','Active']])->get();
-if(!empty($Dynamicbanner))
-{
-@endphp
-
-<section class="banner-area mb--30">
-    @foreach ($Dynamicbanner as $key => $sectionc)
-        <a href="{{ route('productsgroup', $sectionc->product_group) }}"><img src="{{ asset($sectionc->banner_path) }}" class="img-fluid <?= ($sectionc->device_type == 'Mobile')?'mobile-show':'mobile-hide' ?>" alt="{{ $sectionc->$banner_title }}"></a>
-    @endforeach
-</section>
-@php } @endphp
-<?php
-
-foreach (\App\Dynamicbanner::where([['banner_section', '=', '7'],['status','=','Active']])->get() as $key => $feature_product_group)
-{ ?>
-<!-- Mostiviewed Products area Start -->
-<section class="mostviewed-product-area pt--20 pb--60 pt-md--60 pb-md--50">
-  <div class="container">
-    <div class="row">
-      <div class="col-12">
-        <div class="section-title mb--35">
-          <a href="{{ route('productsgroup', $feature_product_group->product_group) }}"><h2><?= $feature_product_group->$banner_title." >>" ?></h2></a>
-        </div>
-      </div>
-    </div>
-    <div class="row no-gutters">
-      <div class="col-12">
-        <div class="product-carousel nav-top js-product-carousel-2">
-            <?php
+            @endforeach
+        @endif
+        <!-- End Banner area  -->
+        
+        <!-- START Offer Section -->
+        @foreach (\App\Dynamicbanner::where([['banner_section', '=', '6'],['status','=','Active']])->get() as $key => $feature_product_group)
+            @php
                 $product_group_id = $feature_product_group->product_group;
-                $group_products = (\App\ProductGroup::whereid($product_group_id)->first());
-                $group_product  = json_decode($group_products->group_products);
-                foreach($group_product as $single_id)
-                {
-
-                    $product = (\App\Product::whereid($single_id)->first());
-
-                    if(!empty($product))
-
-                    { 
-
-                        $brand = (\App\Brand::whereid($product->brand_id)->first()); ?>
-
-                        @include('frontend.single_product')
-
-                    <?php 
-
-                    } 
-
-                } 
-             ?>
-        </div>
-      </div>
-      
-    </div>
-  </div>
-
-
-</section>
-<?php } ?>
-
-
-
-<!-- Popular Top Brands area Start -->
-@php 
-$FeatureBrand = \App\FeatureBrand::where([['is_enable', '=', '0']])->get();
-if(!empty($FeatureBrand))
-{
-@endphp
-<section class="blog-area pt--80 pb--40 pt-md--60 pb-md--30">
-    <div class="container">
-
-        <div class="row">
-
-            <div class="col-12">
-
-                <div class="mostviewed-product-area section-title mb--35">
-                    <h2>{!! __('Popular Top Brands') !!}</h2>
+            @endphp
+            <div class="section pb_20">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            <div class="heading_s4 text-center">
+                                <a href="{{ route('productsgroup', $product_group_id) }}">
+                                    <h2>{{$feature_product_group->$banner_title}}</h2>
+                                </a>
+                            </div>
+                            <p class="text-center leads"></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="product_slider carousel_slider owl-carousel owl-theme nav_style5" data-loop="true" data-dots="false" data-nav="true" data-margin="30" data-responsive='{"0":{"items": "1"}, "481":{"items": "2"}, "768":{"items": "3"}, "1199":{"items": "4"}}'>
+                                @php
+                                    $group_products = (\App\ProductGroup::whereid($product_group_id)->first());
+                                    $group_product  = json_decode($group_products->group_products);
+                                @endphp
+                                @foreach($group_product as $groupKey => $single_id)
+                                    @if($groupKey < 10)
+                                        @php
+                                            $product = (\App\Product::whereid($single_id)->first());
+                                        @endphp
+                                        @if(!empty($product))
+                                            @php
+                                                $brand = (\App\Brand::whereid($product->brand_id)->first());
+                                            @endphp
+                                            @include('frontend.single_product')
+                                        @endif
+                                    @endif
+                                @endforeach
+                            </div>
+                        </div>
+                    </div> 
                 </div>
-
             </div>
-
-        </div>
-
-
-
-        <div class="row">
-
-            <div class="col-12">
-
-                <div class="blog-carousel nav-top slick-brand">
-
-                    @foreach ($FeatureBrand as $key => $popularbrand)
-
-                    <a href="{{ route('products.brand', $popularbrand->id) }}"><center><img src="{{ asset($popularbrand->image) }}" alt="Brand"></center></a>
-
-                    @endforeach
-
+        @endforeach
+        <!-- END  Offer Section -->
+        
+        <!-- Start Banner section c  -->
+        @php 
+            $Dynamicbanner9 = \App\Dynamicbanner::where([['banner_section', '=', '9'],['status','=','Active']])->get();
+        @endphp
+        @if(!empty($Dynamicbanner9))
+            @foreach ($Dynamicbanner9 as $key => $sectionc)
+                <div class="section background_bg" data-img-src="{{ asset($sectionc->banner_path) }}">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-8 col-sm-9">
+                                <div class="furniture_banner">
+                                    <h3 class="single_bn_title">{{ $sectionc->banner_title }}</h3>
+                                    <h4 class="single_bn_title1 text_default">{{ $sectionc->description }}</h4>
+                                    <!-- <div class="mb-4"></div> -->
+                                    <a href="{{ route('productsgroup', $sectionc->product_group) }}" class="btn btn-fill-out">Shop Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            @endforeach
+        @endif
+        <!-- End Banner section c  -->
 
+        <!-- START Most Visited Section -->
+        @foreach (\App\Dynamicbanner::where([['banner_section', '=', '7'],['status','=','Active']])->get() as $key => $feature_product_group)
+            @php
+                $product_group_id = $feature_product_group->product_group;
+            @endphp
+            <div class="section pb_20">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            <div class="heading_s4 text-center">
+                                <a href="{{ route('productsgroup', $product_group_id) }}">
+                                    <h2>{{$feature_product_group->$banner_title}}</h2>
+                                </a>
+                            </div>
+                            <p class="text-center leads"></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="product_slider carousel_slider owl-carousel owl-theme nav_style5" data-loop="true" data-dots="false" data-nav="true" data-margin="30" data-responsive='{"0":{"items": "1"}, "481":{"items": "2"}, "768":{"items": "3"}, "1199":{"items": "4"}}'>
+                                @php
+                                    $group_products = (\App\ProductGroup::whereid($product_group_id)->first());
+                                    $group_product  = json_decode($group_products->group_products);
+                                @endphp
+                                @foreach($group_product as $groupKey => $single_id)
+                                    @if($groupKey < 10)
+                                        @php
+                                            $product = (\App\Product::whereid($single_id)->first());
+                                        @endphp
+                                        @if(!empty($product))
+                                            @php
+                                                $brand = (\App\Brand::whereid($product->brand_id)->first());
+                                            @endphp
+                                            @include('frontend.single_product')
+                                        @endif
+                                    @endif
+                                @endforeach
+                            </div>
+                        </div>
+                    </div> 
+                </div>
             </div>
+        @endforeach
+        <!-- END  Most Visited Section -->
 
-        </div>
-
-     </div>
-
-</section>
-@php } @endphp
-
-
-<!-- Newsletter area End -->
-
-
-
-<div class="newsletter-area pt--40 pb--80 pt-md--30 pb-md--60 bg--dark-4">
-
-  <div class="container">
-
-    <div class="row justify-content-center">
-
-      <div class="col-xl-9 col-lg-10">
-
-        <div class="newsletter text-center">
-
-          <h3 class="color--white">{!! __('Join Our Newsletters Now') !!}</h3>
-
-          <p>Typi non habent claritatem insitam est usus legentis in qui facit eorum claritatem, investigationes demonstraverunt lectores legere me lius quod legunt saepius.</p>
-
-          <form class="newsletter-form validate mt--40" method="POST" action="{{ route('subscribers.store') }}" id="mc-embedded-newsletter-form" name="mc-embedded-newsletter-form" target="_blank" novalidate>
-
-            @csrf
-
-            <input type="email" name="email" id="sub_email" placeholder="{!! __('Enter your email address here...') !!}" class="newsletter-form__input">
-
-            <input type="submit" value="{!! __('Subscribe') !!}" class="btn newsletter-btn btn-style-1">
-
-          </form>
-
-        </div>
-
-      </div>
-
+        <!-- START Brand Section -->
+        @php 
+            $FeatureBrand = \App\FeatureBrand::where([['is_enable', '=', '0']])->get();
+        @endphp
+        @if(!empty($FeatureBrand))
+            <div class="section pb_20">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            <div class="heading_s4 text-center">
+                                <a href="{{ route('our_collection', 'see') }}">
+                                    <h2>{!! __('Popular Top Brands') !!}</h2>
+                                </a>
+                            </div>
+                            <p class="text-center leads"></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="product_slider carousel_slider owl-carousel owl-theme nav_style5" data-loop="true" data-dots="false" data-nav="true" data-margin="30" data-responsive='{"0":{"items": "1"}, "481":{"items": "2"}, "768":{"items": "3"}, "1199":{"items": "4"}}'>
+                                @foreach ($FeatureBrand as $key => $popularbrand)
+                                    <div class="item">
+                                        <div class="product_box text-center">
+                                            <a href="{{ route('products.brand', $popularbrand->id) }}">
+                                                <div class="product_img">
+                                                    <img src="{{ asset($popularbrand->image) }}" alt="product">
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+            </div>   
+        @endif
+        <!-- End Brand Section -->
+        
     </div>
+    <!-- END MAIN CONTENT -->
 
-  </div>
-
-</div>
-
-<?php $j = 1; ?>
-
-@foreach (\App\FlashDeal::where([['status', '=', '1']])->get() as $key => $deals)
-
-<?php 
-
-$date = date('Y-m-d-H-i', $deals->end_date); 
-
-$arr  = explode("-", $date);
-
-$y    = !empty($arr[0])?$arr[0]:0;
-
-$month= !empty($arr[1])?$arr[1]:0;
-
-$d    = !empty($arr[2])?$arr[2]:0;
-
-$h    = !empty($arr[3])?$arr[3]:0;
-
-$m    = !empty($arr[4])?$arr[4]:0;
-
-?>
-<script>
-    $("#simple-timer<?= $j; ?>").syotimer({
-        year: <?= $y ?>,
-        month: <?= $month ?>,
-        day: <?= $d ?>,
-        hour: 23,
-        minute: 59
-    });
-</script>
-<?php $j++; ?>
-@endforeach
 @endsection
